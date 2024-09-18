@@ -19,4 +19,13 @@
 	  <ProjectReference Include="..\ServiceLayer\ServiceLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Responses\" />
+    <Folder Include="Models\Requests\" />
+    <Folder Include="Views\Categories\" />
+    <Folder Include="Views\Reports\" />
+    <Folder Include="Views\Profile\" />
+    <Folder Include="Views\Transactions\" />
+  </ItemGroup>
+
 </Project>
