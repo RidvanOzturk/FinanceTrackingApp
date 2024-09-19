@@ -1,6 +1,8 @@
 using DataLayer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using ServiceLayer.Contracts;
+using ServiceLayer.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<FinanceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FinanceContext")));
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IReportsService, ReportsService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
