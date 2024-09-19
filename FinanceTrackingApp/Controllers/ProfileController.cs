@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ServiceLayer.Contracts;
 
 namespace FinanceTrackingApp.Controllers
 {
-    public class ProfileController : Controller
+    public class ProfileController(IProfileService profileService) : Controller
     {
         public IActionResult GetProfile()
         {

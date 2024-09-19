@@ -1,29 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using ServiceLayer.Contracts;
 namespace FinanceTrackingApp.Controllers
 {
-    public class TransactionsController : Controller
+    public class TransactionsController(ITransactionService transactionService) : Controller
     {
-        [HttpPost("add")]
-        public IActionResult AddTransaction(/*TransactionRequestModel model*/)
+        
+
+        [HttpPost("add-income")]
+        public IActionResult AddIncome(/*IncomeModel model*/)
         {
+            if (ModelState.IsValid)
+            {
+                // Gelir ekleme işlemi
+                return RedirectToAction("ListIncomes");
+            }
             return View(/*model*/);
         }
-        [HttpGet("list")]
-        public IActionResult ListTransactions()
+
+        
+
+        [HttpPost("add-expense")]
+        public IActionResult AddExpense(/*ExpenseModel model*/)
         {
-            return RedirectToAction( "List" );
+            if (ModelState.IsValid)
+            {
+                // Gider ekleme işlemi
+                return RedirectToAction("ListExpenses");
+            }
+            return View(/*model*/);
         }
-        [HttpPut("update/{id}")]
-        public IActionResult UpdateTransaction(/*Guid id, TransactionModel model*/)
-        {
-            return View();
-        }
-        [HttpDelete("delete/{id}")]
-        public IActionResult DeleteTransaction(Guid id)
-        {
-            return RedirectToAction("Delete", id);
-        }
+
 
 
     }

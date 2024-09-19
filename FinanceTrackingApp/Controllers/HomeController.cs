@@ -1,3 +1,4 @@
+using DataLayer.Entities;
 using FinanceTrackingApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace FinanceTrackingApp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction();
         }
 
         public IActionResult Privacy()

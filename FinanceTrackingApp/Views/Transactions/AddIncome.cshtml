@@ -1,0 +1,19 @@
+﻿@model DataLayer.Entities.Income
+@{
+    ViewData["Title"] = "AddIncome";
+}
+
+<h1>AddIncome</h1>
+
+<form asp-action="AddIncome" method="post">
+    <label>Gelir Miktarı:</label>
+    <input type="number" asp-for="Amount" />
+
+    <label>Kategori:</label>
+    <select asp-for="CategoryId">
+        <option value="1">Maaş</option>
+        <option value="2">Kira Geliri</option>
+    </select>
+
+    <button type="submit">Gelir Ekle</button>
+</form>

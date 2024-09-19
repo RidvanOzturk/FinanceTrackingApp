@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ServiceLayer.Contracts;
 
 namespace FinanceTrackingApp.Controllers
 {
-    public class CategoriesController : Controller
+    public class CategoriesController(ICategoriesService categoriesService) : Controller
     {
         [HttpGet("list")]
         public IActionResult ListCategories()

@@ -25,7 +25,6 @@
     <Folder Include="Views\Categories\" />
     <Folder Include="Views\Reports\" />
     <Folder Include="Views\Profile\" />
-    <Folder Include="Views\Transactions\" />
   </ItemGroup>
 
 </Project>

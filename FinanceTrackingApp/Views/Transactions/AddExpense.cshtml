@@ -1,0 +1,21 @@
+﻿@model DataLayer.Entities.Expense
+@{
+    ViewData["Title"] = "AddExpense";
+}
+
+<h1>AddExpense</h1>
+
+
+<form asp-action="AddExpense" method="post">
+    <label>Gider Miktarı:</label>
+    <input type="number" asp-for="Amount" />
+
+    <label>Kategori:</label>
+    <select asp-for="CategoryId">
+        <option value="1">Yemek</option>
+        <option value="2">Ulaşım</option>
+    </select>
+
+    <button type="submit">Gider Ekle</button>
+</form>
+
