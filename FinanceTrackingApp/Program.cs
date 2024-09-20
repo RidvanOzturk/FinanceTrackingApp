@@ -10,7 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<FinanceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FinanceContext")));
-
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication("Cookies").AddCookie(options =>
+{
+    options.LoginPath = "/Auth/Login"; 
+});
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
