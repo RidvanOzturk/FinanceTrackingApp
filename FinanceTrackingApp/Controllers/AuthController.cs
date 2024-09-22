@@ -13,13 +13,19 @@ namespace FinanceTrackingApp.Controllers;
 [Route("Auth")]
 public class AuthController(IAuthService authService) : Controller
 {
+    [HttpGet("login")]
+    public IActionResult Login()
+    {
+        return View(); 
+    }
+
     [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login(string username, string password)
     {
         if (!ModelState.IsValid)
         {
-            return View(); // Model geçerli değilse formu tekrar göster
+            return View(); 
         }
 
         var claims = await authService.LoginAsync(username, password);
@@ -28,12 +34,12 @@ public class AuthController(IAuthService authService) : Controller
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-            return RedirectToAction("Index", "Home"); // Başarılı giriş sonrası yönlendirme
+            return RedirectToAction("Index", "Home"); 
         }
         else
         {
             ModelState.AddModelError("", "Invalid username or password");
-            return View(); // Başarısız giriş durumunda tekrar login sayfasına dön
+            return View(); 
         }
 
     }

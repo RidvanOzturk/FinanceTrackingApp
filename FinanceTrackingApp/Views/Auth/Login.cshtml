@@ -5,3 +5,9 @@
 
 <h1>Login</h1>
 
+<form method="post" asp-action="Login" asp-controller="Auth">
+    <input type="text" name="username" placeholder="Kullanıcı Adı" required />
+    <input type="password" name="password" placeholder="Şifre" required />
+    <button type="submit">Giriş Yap</button>
+</form>
+
