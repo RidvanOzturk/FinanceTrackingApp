@@ -5,50 +5,51 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ServiceLayer.Contracts;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using ServiceLayer.Implementations;
 
-namespace FinanceTrackingApp.Controllers
+namespace FinanceTrackingApp.Controllers;
+
+[Route("Auth")]
+public class AuthController(IAuthService authService) : Controller
 {
-    public class AuthController(IAuthService authService) : Controller
+    [AllowAnonymous]
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(string username, string password)
     {
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(string username, string password)
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(username,password);
-            }
-            var claims = await authService.LoginAsync(username, password);
-
-            if (claims.Count != 0)
-            {
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                // Hatalı giriş olursa buraya düşsün
-                ModelState.AddModelError("", "Invalid username or password");
-                return View();
-            }
+            return View(); // Model geçerli değilse formu tekrar göster
         }
 
-
-        [HttpPost("register")]
-        public IActionResult Register()
+        var claims = await authService.LoginAsync(username, password);
+        if (claims.Count > 0)
         {
-            
-            return View();
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            return RedirectToAction("Index", "Home"); // Başarılı giriş sonrası yönlendirme
+        }
+        else
+        {
+            ModelState.AddModelError("", "Invalid username or password");
+            return View(); // Başarısız giriş durumunda tekrar login sayfasına dön
         }
 
+    }
 
-        [HttpPost("logout")]
-        public IActionResult Logout()
-        {
-            return View();
-        }
+
+    [HttpPost("register")]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await authService.LogoutAsync();
+        return RedirectToAction("Login", "Auth");
     }
 }

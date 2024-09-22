@@ -48,7 +48,7 @@ namespace ServiceLayer.Implementations
             var user = await context.Users.FirstOrDefaultAsync(x => x.Username == username);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
-                return [];
+                return new List<Claim>();
             }
 
 

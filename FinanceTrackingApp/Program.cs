@@ -13,7 +13,10 @@ builder.Services.AddDbContext<FinanceContext>(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication("Cookies").AddCookie(options =>
 {
-    options.LoginPath = "/Auth/Login"; 
+    options.LoginPath = "/Auth/Login";
+    options.LogoutPath = "/Auth/Logout";
+    options.AccessDeniedPath = "/Auth/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 });
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
@@ -34,11 +37,21 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapGet("/", context =>
+    {
+        context.Response.Redirect("/Auth/Login");
+        return Task.CompletedTask;
+    });
+});
+
 
 app.Run();

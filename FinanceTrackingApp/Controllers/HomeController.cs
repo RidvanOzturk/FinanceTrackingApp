@@ -16,7 +16,7 @@ namespace FinanceTrackingApp.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction();
+            return RedirectToAction("Login","Auth");
         }
 
         public IActionResult Privacy()
