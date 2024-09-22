@@ -1,0 +1,25 @@
+﻿@model FinanceTrackingApp.Models.Requests.RegisterRequestModel
+
+
+
+<h2>Kayıt Ol</h2>
+
+
+<form asp-action="Register" method="post">
+    <div>
+        <label asp-for="username"></label>
+        <input asp-for="username" />
+        <span asp-validation-for="username"></span>
+    </div>
+    <div>
+        <label asp-for="mail"></label>
+        <input asp-for="mail" />
+        <span asp-validation-for="mail"></span>
+    </div>
+    <div>
+        <label asp-for="password"></label>
+        <input asp-for="password" type="password" />
+        <span asp-validation-for="password"></span>
+    </div>
+    <button type="submit">Register</button>
+</form>

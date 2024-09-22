@@ -7,6 +7,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using ServiceLayer.Implementations;
+using ServiceLayer.DTOs;
+using FinanceTrackingApp.Models.Requests;
 
 namespace FinanceTrackingApp.Controllers;
 
@@ -44,12 +46,41 @@ public class AuthController(IAuthService authService) : Controller
 
     }
 
-
-    [HttpPost("register")]
+    [HttpGet("register")]
     public IActionResult Register()
     {
-        return View();
+        return View(); // Register.cshtml sayfasını döndürüyoruz
     }
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequestModel requestModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(requestModel);
+        }
+
+        // DTO'ya dönüştür
+        var requestDTO = new RegisterRequestDTO
+        {
+            username = requestModel.username,
+            email = requestModel.mail,
+            password = requestModel.password
+        };
+
+        // Servis çağrısı
+        var result = await authService.RegisterAsync(requestDTO);
+        if (result)
+        {
+            return RedirectToAction("Login");
+        }
+        else
+        {
+            ModelState.AddModelError("", "User already exists");
+            return View(requestModel);
+        }
+    }
+
+
 
 
     [HttpPost("logout")]

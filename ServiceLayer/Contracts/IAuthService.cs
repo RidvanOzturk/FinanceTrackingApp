@@ -11,7 +11,7 @@ namespace ServiceLayer.Contracts
     public interface IAuthService
     {
         Task<List<Claim>> LoginAsync(string username, string password);
-        Task<bool> RegisterAsync(RegisterRequestDTO requestDTO);
+        Task<bool> RegisterAsync(RegisterRequestDTO registerRequestDTO);
         Task LogoutAsync();
 
     }
