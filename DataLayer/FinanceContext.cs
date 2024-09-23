@@ -23,6 +23,12 @@ namespace DataLayer
                 .HasForeignKey(e => e.UserId);
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Category>().HasData(
+             new Category { Id = Guid.NewGuid(), Name = "Maaş", Type = "Gelir" },
+             new Category { Id = Guid.NewGuid(), Name = "Kira Geliri", Type = "Gelir" },
+             new Category { Id = Guid.NewGuid(), Name = "Yatırım Geliri", Type = "Gelir" },
+             new Category { Id = Guid.NewGuid(), Name = "Diğer Gelirler", Type = "Gelir" }
+            );
         }
     }
 

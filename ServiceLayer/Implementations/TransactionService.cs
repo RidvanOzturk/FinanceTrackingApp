@@ -32,5 +32,11 @@ namespace ServiceLayer.Implementations
             var result = await context.SaveChangesAsync();
             return result > 0;
         }
+
+
+        public async Task<List<Category>> GetCategoriesAsync()
+        {
+            return await context.Categories.ToListAsync();
+        }
     }
 }

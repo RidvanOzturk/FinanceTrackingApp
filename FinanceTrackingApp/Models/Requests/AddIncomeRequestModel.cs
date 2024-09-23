@@ -6,6 +6,7 @@ public class AddIncomeRequestModel
 {
     public string username { get; set; }
     public decimal amount { get; set; }
-    public int CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
     public DateTime date { get; set; }
+    public List<Category> Categories { get; set; }
 }

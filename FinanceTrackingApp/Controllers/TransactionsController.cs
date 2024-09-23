@@ -15,24 +15,29 @@ public class TransactionsController(ITransactionService transactionService) : Co
     }
 
     [HttpGet("add-income")]
-    public IActionResult AddIncome()
+    public async Task<IActionResult> AddIncome()
     {
-        return View();
+        var categories = await transactionService.GetCategoriesAsync();
+        var model = new AddIncomeRequestModel
+        {
+            Categories = categories
+        };
+        return View(model); 
     }
 
     [HttpPost("add-income")]
     public async Task<IActionResult> AddIncome(AddIncomeRequestModel requestModel)
     {
-        
         if (ModelState.IsValid)
         {
             var requestDTO = new AddIncomeRequestDTO
             {
-                username = requestModel.username,
+                username = User.Identity.Name, 
                 amount = requestModel.amount,
-                CategoryId = requestModel.CategoryId, 
-                date = requestModel.date,
+                CategoryId = requestModel.CategoryId,
+                date = requestModel.date
             };
+
             var result = await transactionService.AddIncomeAsync(requestDTO);
             if (result)
             {
@@ -40,14 +45,17 @@ public class TransactionsController(ITransactionService transactionService) : Co
             }
             else
             {
-                ModelState.AddModelError("", "User already exists");
+                ModelState.AddModelError("", "Error while adding income");
                 return View(requestModel);
             }
         }
-        return View();
+
+        requestModel.Categories = await transactionService.GetCategoriesAsync();
+        return View(requestModel);
     }
 
-    
+
+
 
     [HttpPost("add-expense")]
     public IActionResult AddExpense(/*ExpenseModel model*/)

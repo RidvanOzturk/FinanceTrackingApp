@@ -39,6 +39,32 @@ namespace DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("46335c1b-25a5-4e97-ab9b-953fa4170078"),
+                            Name = "Maaş",
+                            Type = "Gelir"
+                        },
+                        new
+                        {
+                            Id = new Guid("171896b5-a68e-4458-82b3-676d4036eaac"),
+                            Name = "Kira Geliri",
+                            Type = "Gelir"
+                        },
+                        new
+                        {
+                            Id = new Guid("3e1aa256-c540-4611-805c-ebd456d1aae2"),
+                            Name = "Yatırım Geliri",
+                            Type = "Gelir"
+                        },
+                        new
+                        {
+                            Id = new Guid("6799046f-9b37-403c-93ac-6612b44e4141"),
+                            Name = "Diğer Gelirler",
+                            Type = "Gelir"
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Expense", b =>
@@ -68,36 +94,6 @@ namespace DataLayer.Migrations
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Income", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("CategoryId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId1");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Incomes");
-                });
-
             modelBuilder.Entity("DataLayer.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -121,6 +117,33 @@ namespace DataLayer.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Income", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Incomes");
+                });
+
             modelBuilder.Entity("DataLayer.Entities.Expense", b =>
                 {
                     b.HasOne("DataLayer.Entities.Category", "Category")
@@ -140,11 +163,11 @@ namespace DataLayer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Income", b =>
+            modelBuilder.Entity("Income", b =>
                 {
                     b.HasOne("DataLayer.Entities.Category", "Category")
                         .WithMany("Incomes")
-                        .HasForeignKey("CategoryId1")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
