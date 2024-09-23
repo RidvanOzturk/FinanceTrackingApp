@@ -4,8 +4,9 @@
 }
 
 <h1>AddIncome</h1>
-<input type="hidden" asp-for="User.Username" value="@User.Identity.Name" />
+
 <form asp-action="AddIncome" method="post">
+    <input type="hidden" name="Username" value="@User.Identity.Name" />
     <label>Gelir Miktarı:</label>
     <input type="number" asp-for="Amount" />
 

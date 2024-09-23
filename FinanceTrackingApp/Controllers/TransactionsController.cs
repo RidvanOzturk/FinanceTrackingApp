@@ -26,7 +26,6 @@ public class TransactionsController(ITransactionService transactionService) : Co
         
         if (ModelState.IsValid)
         {
-            var username = HttpContext.User.Identity.Name;
             var requestDTO = new AddIncomeRequestDTO
             {
                 username = requestModel.username,
