@@ -24,8 +24,8 @@ namespace ServiceLayer.Implementations
             {
                 Id = Guid.NewGuid(), 
                 Amount = model.amount,     
-                Date = model.date,         
-                Category = model.category, 
+                Date = model.date,
+                CategoryId = model.CategoryId,
                 UserId = user.Id     
             };
             await context.Incomes.AddAsync(income);

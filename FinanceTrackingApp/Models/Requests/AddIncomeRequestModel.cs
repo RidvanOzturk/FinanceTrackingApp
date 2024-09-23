@@ -1,12 +1,11 @@
 ﻿using DataLayer.Entities;
 
+namespace FinanceTrackingApp.Models.Requests;
 
-namespace ServiceLayer.DTOs;
-
-public class AddIncomeRequestDTO
+public class AddIncomeRequestModel
 {
     public string username { get; set; }
-    public decimal amount {  get; set; }
+    public decimal amount { get; set; }
     public int CategoryId { get; set; }
     public DateTime date { get; set; }
 }

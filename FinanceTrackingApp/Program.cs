@@ -46,12 +46,18 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
+    endpoints.MapControllerRoute(
+        name: "transactions",
+        pattern: "transactions/{action=Dashboard}/{id?}",
+        defaults: new { controller = "Transactions", action = "Dashboard" });
+
     endpoints.MapGet("/", context =>
     {
         context.Response.Redirect("/Auth/Login");
         return Task.CompletedTask;
     });
 });
+
 
 
 app.Run();

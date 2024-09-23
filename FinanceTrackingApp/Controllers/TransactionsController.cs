@@ -1,36 +1,66 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FinanceTrackingApp.Models.Requests;
+using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Contracts;
-namespace FinanceTrackingApp.Controllers
+using ServiceLayer.DTOs;
+namespace FinanceTrackingApp.Controllers;
+
+[Route("transactions")]
+public class TransactionsController(ITransactionService transactionService) : Controller
 {
-    public class TransactionsController(ITransactionService transactionService) : Controller
+    [HttpGet("dashboard")]
+    public IActionResult Dashboard()
+    {
+        ViewData["Title"] = "Income-Expense Dashboard";
+        return View();
+    }
+
+    [HttpGet("add-income")]
+    public IActionResult AddIncome()
+    {
+        return View();
+    }
+
+    [HttpPost("add-income")]
+    public async Task<IActionResult> AddIncome(AddIncomeRequestModel requestModel)
     {
         
-
-        [HttpPost("add-income")]
-        public IActionResult AddIncome(/*IncomeModel model*/)
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
+            var username = HttpContext.User.Identity.Name;
+            var requestDTO = new AddIncomeRequestDTO
             {
-                // Gelir ekleme işlemi
-                return RedirectToAction("ListIncomes");
-            }
-            return View(/*model*/);
-        }
-
-        
-
-        [HttpPost("add-expense")]
-        public IActionResult AddExpense(/*ExpenseModel model*/)
-        {
-            if (ModelState.IsValid)
+                username = requestModel.username,
+                amount = requestModel.amount,
+                CategoryId = requestModel.CategoryId, 
+                date = requestModel.date,
+            };
+            var result = await transactionService.AddIncomeAsync(requestDTO);
+            if (result)
             {
-                // Gider ekleme işlemi
-                return RedirectToAction("ListExpenses");
+                return RedirectToAction("Dashboard");
             }
-            return View(/*model*/);
+            else
+            {
+                ModelState.AddModelError("", "User already exists");
+                return View(requestModel);
+            }
         }
-
-
-
+        return View();
     }
+
+    
+
+    [HttpPost("add-expense")]
+    public IActionResult AddExpense(/*ExpenseModel model*/)
+    {
+        if (ModelState.IsValid)
+        {
+            // Gider ekleme işlemi
+            return RedirectToAction("ListExpenses");
+        }
+        return View(/*model*/);
+    }
+
+
+
 }
