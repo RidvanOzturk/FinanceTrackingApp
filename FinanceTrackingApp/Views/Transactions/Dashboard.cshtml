@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Income-Expense Dashboard";
 }
-<h2>@(ViewData["Title"] ?? "Default Title")</h2>
+<h2 style="text-align:center">@(ViewData["Title"] ?? "Default Title")</h2>
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-6">
@@ -47,19 +47,47 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script>
-    var ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+    var ctx = document.getElementById('incomeExpenseChart');
     var chartData = {
-        labels: ['Income', 'Expense'],
+        labels: ['Income', 'Expense', 'Balance'],
         datasets: [{
-            backgroundColor: ["#2b5797", "#b91d47"],
-            data: [@Model.TotalIncome, @Model.TotalExpense],
+            data: [@Model.TotalIncome, @Model.TotalExpense, @Model.Balance],
+            backgroundColor: ["#28a745", "#dc3545", "#008080"],
+            borderColor: '#ffffff',  
+            borderWidth: 3,  
+            hoverBackgroundColor: ["#dddddd"],
+            hoverBorderColor: "#000000"  
         }]
     };
 
     var incomeExpenseChart = new Chart(ctx, {
         type: 'pie',
         data: chartData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        fontColor: '#333',  
+                        fontSize: 16  
+                    }
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
     });
+    console.log('Total Income: ', @Model.TotalIncome);
+    console.log('Total Expense: ', @Model.TotalExpense);
 </script>
+
+
