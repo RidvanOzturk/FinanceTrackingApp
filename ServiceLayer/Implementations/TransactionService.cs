@@ -78,5 +78,36 @@ namespace ServiceLayer.Implementations
                 .Where(e => e.User.Username == username)
                 .SumAsync(e => e.Amount);
         }
+        public async Task<List<IncomeExpenseListViewDTO>> GetIncomeExpenseListAsync()
+        {
+            var incomeExpenseList = new List<IncomeExpenseListViewDTO>();
+
+            var incomes = await context.Incomes
+                .Include(i => i.Category)
+                .ToListAsync();
+            incomeExpenseList.AddRange(incomes.Select(i => new IncomeExpenseListViewDTO
+            {
+                Id = i.Id,
+                CategoryName = i.Category.Name,
+                Amount = i.Amount,
+                Date = i.Date,
+                Type = "Income"
+            }));
+
+            var expenses = await context.Expenses
+                .Include(e => e.Category)
+                .ToListAsync();
+            incomeExpenseList.AddRange(expenses.Select(e => new IncomeExpenseListViewDTO
+            {
+                Id = e.Id,
+                CategoryName = e.Category.Name,
+                Amount = e.Amount,
+                Date = e.Date,
+                Type = "Expense"
+            }));
+
+            return incomeExpenseList;
+        }
+
     }
 }
