@@ -1,4 +1,5 @@
 ﻿using FinanceTrackingApp.Models.Requests;
+using FinanceTrackingApp.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
@@ -7,13 +8,28 @@ namespace FinanceTrackingApp.Controllers;
 [Route("transactions")]
 public class TransactionsController(ITransactionService transactionService) : Controller
 {
+   
     [HttpGet("dashboard")]
-    public IActionResult Dashboard()
+    public async Task<IActionResult> Dashboard()
     {
         ViewData["Title"] = "Income-Expense Dashboard";
-        return View();
-    }
 
+        var username = User.Identity.Name;
+
+        var totalIncome = await transactionService.GetTotalIncomeAsync(username);
+        var totalExpense = await transactionService.GetTotalExpenseAsync(username);
+
+        var balance = totalIncome - totalExpense;
+
+        var model = new DashboardViewResponseModel
+        {
+            TotalIncome = totalIncome,
+            TotalExpense = totalExpense,
+            Balance = balance
+        };
+
+        return View(model);
+    }
     [HttpGet("add-income")]
     public async Task<IActionResult> AddIncome()
     {
