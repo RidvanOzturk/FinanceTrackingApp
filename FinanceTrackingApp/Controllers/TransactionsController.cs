@@ -113,7 +113,10 @@ public class TransactionsController(ITransactionService transactionService) : Co
         requestModel.Categories = await transactionService.GetExpenseCategoriesAsync();
         return View(requestModel);
     }
-
-
+    [HttpGet("IncomeExpenseList")]
+    public  IActionResult IncomeExpenseList()
+    {
+        return View();
+    }
 
 }

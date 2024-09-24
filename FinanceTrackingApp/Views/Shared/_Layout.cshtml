@@ -9,18 +9,18 @@
         body {
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Tüm sayfa yüksekliği için */
-            background-color: #f8f9fa; /* Sayfanın arka plan rengi */
+            min-height: 100vh; 
+            background-color: #f8f9fa;
         }
         footer {
-            background-color: #343a40; /* Koyu gri footer rengi */
-            color: white; /* Footer yazı rengi */
-            text-align: center; /* Footer yazısını ortala */
-            padding: 10px 0; /* Footer içi boşluk */
-            margin-top: auto; /* Footer'ı en alta it */
+            background-color: #343a40;
+            color: white; 
+            text-align: center; 
+            padding: 10px 0; 
+            margin-top: auto; 
         }
         header {
-            background-color: #a0a0a0; /* Hafif koyu header rengi */
+            background-color: #a0a0a0; 
         }
     </style>
 </head>
@@ -29,6 +29,13 @@
         <nav class="navbar navbar-expand-lg navbar-light ">
             <div class="container">
                 <a class="navbar-brand" href="/Transactions/dashboard">Finance Tracking App</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                 <a class="navbar-brand" style="font-size:17px;" href="/Transactions/dashboard">Dashboard</a>
+                    <a class="navbar-brand" style="font-size:17px;" href="/Transactions/add-income">Add Income</a>
+                    <a class="navbar-brand" style="font-size:17px;" href="/Transactions/add-expense">Add Expense</a>
+                
+                }
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
@@ -52,7 +59,6 @@
         </nav>
     </header>
     <div class="container flex-grow-1">
-        <!-- Flex-grow sınıfı ile içerik alanını büyüt -->
         @RenderBody()
     </div>
     <footer>
