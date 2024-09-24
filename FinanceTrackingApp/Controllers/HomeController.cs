@@ -1,5 +1,6 @@
 using DataLayer.Entities;
 using FinanceTrackingApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -13,10 +14,10 @@ namespace FinanceTrackingApp.Controllers
         {
             _logger = logger;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
-            return RedirectToAction("Login","Auth");
+            return View();
         }
 
         public IActionResult Privacy()

@@ -51,12 +51,20 @@ app.UseEndpoints(endpoints =>
         pattern: "transactions/{action=Dashboard}/{id?}",
         defaults: new { controller = "Transactions", action = "Dashboard" });
 
-    endpoints.MapGet("/", context =>
+    endpoints.MapGet("/", async context =>
     {
-        context.Response.Redirect("/Auth/Login");
-        return Task.CompletedTask;
+        if (context.User.Identity.IsAuthenticated)
+        {
+            context.Response.Redirect("/Home/Index"); 
+        }
+        else
+        {
+            context.Response.Redirect("/Auth/Login"); 
+        }
+        await Task.CompletedTask;
     });
 });
+
 
 
 

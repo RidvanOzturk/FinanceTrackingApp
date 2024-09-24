@@ -5,12 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Finance Tracking App</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Tüm sayfa yüksekliği için */
+            background-color: #f8f9fa; /* Sayfanın arka plan rengi */
+        }
+        footer {
+            background-color: #343a40; /* Koyu gri footer rengi */
+            color: white; /* Footer yazı rengi */
+            text-align: center; /* Footer yazısını ortala */
+            padding: 10px 0; /* Footer içi boşluk */
+            margin-top: auto; /* Footer'ı en alta it */
+        }
+        header {
+            background-color: #a0a0a0; /* Hafif koyu header rengi */
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light ">
             <div class="container">
-                <a class="navbar-brand" href="/">Finance Tracking App</a>
+                <a class="navbar-brand" href="/Transactions/dashboard">Finance Tracking App</a>
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ms-auto">
                         @if (User.Identity.IsAuthenticated)
@@ -23,7 +41,7 @@
                         }
                         else
                         {
-                            <li class="nav-item">
+                            <li class="nav-item d-flex">
                                 <a class="nav-link" href="@Url.Action("Register", "Auth")">SignUp</a>
                                 <a class="nav-link" href="@Url.Action("Login", "Auth")">Login</a>
                             </li>
@@ -33,7 +51,8 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container flex-grow-1">
+        <!-- Flex-grow sınıfı ile içerik alanını büyüt -->
         @RenderBody()
     </div>
     <footer>

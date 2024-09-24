@@ -1,5 +1,6 @@
 ﻿using FinanceTrackingApp.Models.Requests;
 using FinanceTrackingApp.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
@@ -8,7 +9,7 @@ namespace FinanceTrackingApp.Controllers;
 [Route("transactions")]
 public class TransactionsController(ITransactionService transactionService) : Controller
 {
-   
+    [Authorize]
     [HttpGet("dashboard")]
     public async Task<IActionResult> Dashboard()
     {
@@ -30,6 +31,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
 
         return View(model);
     }
+    [Authorize]
     [HttpGet("add-income")]
     public async Task<IActionResult> AddIncome()
     {
@@ -70,7 +72,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
         return View(requestModel);
     }
 
-
+    [Authorize]
     [HttpGet("add-expense")]
     public async Task<IActionResult> AddExpense()
     {

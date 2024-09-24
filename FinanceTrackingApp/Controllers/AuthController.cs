@@ -29,7 +29,6 @@ public class AuthController(IAuthService authService) : Controller
         {
             return View(); 
         }
-
         var claims = await authService.LoginAsync(username, password);
         if (claims.Count > 0)
         {
@@ -43,13 +42,12 @@ public class AuthController(IAuthService authService) : Controller
             ModelState.AddModelError("", "Invalid username or password");
             return View(); 
         }
-
     }
 
     [HttpGet("register")]
     public IActionResult Register()
     {
-        return View(); // Register.cshtml sayfasını döndürüyoruz
+        return View(); 
     }
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequestModel requestModel)
@@ -58,16 +56,12 @@ public class AuthController(IAuthService authService) : Controller
         {
             return View(requestModel);
         }
-
-        // DTO'ya dönüştür
         var requestDTO = new RegisterRequestDTO
         {
             username = requestModel.username,
             email = requestModel.mail,
             password = requestModel.password
         };
-
-        // Servis çağrısı
         var result = await authService.RegisterAsync(requestDTO);
         if (result)
         {
@@ -79,9 +73,6 @@ public class AuthController(IAuthService authService) : Controller
             return View(requestModel);
         }
     }
-
-
-
 
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
