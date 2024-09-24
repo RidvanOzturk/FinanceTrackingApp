@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.DTOs;
 
-public class RegisterRequestDTO
+public class AddExpenseRequestDTO
 {
     public string username { get; set; }
-    public string password { get; set; }
-    public string email { get; set; }
+    public decimal amount { get; set; }
+    public Guid CategoryId { get; set; }
+    public DateTime date { get; set; }
 }

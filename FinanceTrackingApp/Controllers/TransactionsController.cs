@@ -17,7 +17,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     [HttpGet("add-income")]
     public async Task<IActionResult> AddIncome()
     {
-        var categories = await transactionService.GetCategoriesAsync();
+        var categories = await transactionService.GetIncomeCategoriesAsync();
         var model = new AddIncomeRequestModel
         {
             Categories = categories
@@ -50,22 +50,50 @@ public class TransactionsController(ITransactionService transactionService) : Co
             }
         }
 
-        requestModel.Categories = await transactionService.GetCategoriesAsync();
+        requestModel.Categories = await transactionService.GetIncomeCategoriesAsync();
         return View(requestModel);
     }
 
 
+    [HttpGet("add-expense")]
+    public async Task<IActionResult> AddExpense()
+    {
+        var categories = await transactionService.GetExpenseCategoriesAsync();
+        var model = new AddExpenseRequestModel
+        {
+            Categories = categories
+        };
+        return View(model);
+    }
 
 
     [HttpPost("add-expense")]
-    public IActionResult AddExpense(/*ExpenseModel model*/)
+    public async Task<IActionResult> AddExpense(AddExpenseRequestModel requestModel)
     {
         if (ModelState.IsValid)
         {
-            // Gider ekleme işlemi
-            return RedirectToAction("ListExpenses");
+            var requestDTO = new AddExpenseRequestDTO
+            {
+                username = User.Identity.Name,
+                amount = requestModel.amount,
+                CategoryId = requestModel.CategoryId,
+                date = requestModel.date
+            };
+
+            var result = await transactionService.AddExpenseAsync(requestDTO);
+            if (result)
+            {
+                return RedirectToAction("Dashboard");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Error while adding income");
+                return View(requestModel);
+            }
         }
-        return View(/*model*/);
+
+        requestModel.Categories = await transactionService.GetExpenseCategoriesAsync();
+        return View(requestModel);
     }
 
 

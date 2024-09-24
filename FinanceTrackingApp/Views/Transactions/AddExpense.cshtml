@@ -1,4 +1,4 @@
-﻿@model DataLayer.Entities.Expense
+﻿@model FinanceTrackingApp.Models.Requests.AddExpenseRequestModel
 @{
     ViewData["Title"] = "AddExpense";
 }
@@ -7,15 +7,23 @@
 
 
 <form asp-action="AddExpense" method="post">
+    @foreach (var category in Model.Categories)
+    {
+        <input type="hidden" name="Categories[@category.Id].Id" value="@category.Id" />
+        <input type="hidden" name="Categories[@category.Id].Name" value="@category.Name" />
+        <input type="hidden" name="Categories[@category.Id].Type" value="@category.Type" />
+    }
+    <input type="hidden" name="Username" value="@User.Identity.Name" />
     <label>Gider Miktarı:</label>
-    <input type="number" asp-for="Amount" />
+    <input type="number" asp-for="amount" />
 
     <label>Kategori:</label>
-    <select asp-for="CategoryId">
-        <option value="1">Yemek</option>
-        <option value="2">Ulaşım</option>
+    <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+        <option value="">Kategori Seçin</option>
     </select>
 
+    <label>Gider Tarihi:</label>
+    <input type="date" id="Date" name="Date" asp-for="date">
     <button type="submit">Gider Ekle</button>
 </form>
 
