@@ -45,7 +45,7 @@ namespace ServiceLayer.Implementations
 
         public async Task<List<Claim>> LoginAsync(string username, string password)
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Username == username);
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Username == username || x.Email == username);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
                 return new List<Claim>();

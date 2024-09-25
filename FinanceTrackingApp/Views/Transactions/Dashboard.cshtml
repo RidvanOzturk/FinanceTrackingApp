@@ -53,7 +53,7 @@
     var chartData = {
         labels: ['Income', 'Expense', 'Balance'],
         datasets: [{
-            data: [parseFloat(@Model.TotalIncome), parseFloat(@Model.TotalExpense), parseFloat(@Model.Balance)],
+            data: [@Model.TotalIncomeFloat, @Model.TotalExpenseFloat, @Model.BalanceFloat],
             backgroundColor: ["#28a745", "#dc3545", "#008080"],
             borderColor: '#ffffff',  
             borderWidth: 3,  
@@ -88,6 +88,7 @@
     });
     console.log('Total Income: ', @Model.TotalIncome);
     console.log('Total Expense: ', @Model.TotalExpense);
+    console.log('Total Expense: ', @Model.TotalIncomeFloat);
 </script>
 
 
