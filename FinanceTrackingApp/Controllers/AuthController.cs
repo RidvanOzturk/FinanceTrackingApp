@@ -49,6 +49,7 @@ public class AuthController(IAuthService authService) : Controller
     {
         return View(); 
     }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterRequestModel requestModel)
     {

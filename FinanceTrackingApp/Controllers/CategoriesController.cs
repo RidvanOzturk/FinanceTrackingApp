@@ -5,23 +5,40 @@ namespace FinanceTrackingApp.Controllers
 {
     public class CategoriesController(ICategoriesService categoriesService) : Controller
     {
+        // GET - category/list
         [HttpGet("list")]
         public IActionResult ListCategories()
         {
             return View();
         }
-        [HttpPost("add")]
+
+        // GET - category/id
+        [HttpGet]
+        public IActionResult Get([FromRoute] Guid id)
+        {
+            return View();
+        }
+
+        // POST - category (model)
+        [HttpPost]
         public IActionResult AddCategory(/*CategoryModel model*/)
         {
             return View();
         }
-        [HttpPut("update/{id}")]
-        public IActionResult UpdateCategory(/*Guid id, CategoryModel model*/)
+
+        // PUT - category/id (model)
+        [HttpPut]
+        public IActionResult UpdateCategory(/*[FromRoute] Guid id, CategoryModel model*/)
         {
             return RedirectToAction("Index");
         }
-        [HttpDelete("delete/{id}")]
-        public IActionResult DeleteCategory(Guid id)
+
+        // .../categories/3 - Route parameter
+        // .../categories?userid=3 - Query parameter
+
+        // DELETE - category/id
+        [HttpDelete]
+        public IActionResult DeleteCategory([FromQuery] Guid id)
         {
             return View(id);
         }

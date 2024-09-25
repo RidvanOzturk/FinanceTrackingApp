@@ -21,8 +21,8 @@ builder.Services.AddAuthentication("Cookies").AddCookie(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<IReportsService, ReportsService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,64 @@
+﻿@model ServiceLayer.DTOs.ReportingViewDTO
+
+@{
+    ViewData["Title"] = "Reporting";
+}
+
+<h2>@(ViewData["Title"] ?? "Report")</h2>
+
+<div class="container mt-4">
+    <form method="get" asp-action="ShowReport">
+        <div class="row">
+            <!-- Date Range Picker -->
+            <div class="col-md-6">
+                <label>Start Date</label>
+                <input type="date" asp-for="StartDate" class="form-control" />
+
+                <label>End Date</label>
+                <input type="date" asp-for="EndDate" class="form-control" />
+            </div>
+
+            <!-- Category Filter -->
+            <div class="col-md-6">
+                <label>Category</label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary">Show</button>
+            </div>
+
+            <div class="col-md-6 text-right">
+                <button type="button" class="btn btn-success">Download</button>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <canvas id="reportChart"></canvas>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('reportChart').getContext('2d');
+    var reportData = {
+        labels: ['Income', 'Expense'],
+        datasets: [{
+            backgroundColor: ["#2b5797", "#b91d47"],
+            data: [parseFloat(@Model.TotalIncome), parseFloat(@Model.TotalExpense)]
+        }]
+    };
+
+    var reportChart = new Chart(ctx, {
+        type: 'pie',
+        data: reportData,
+    });
+</script>

@@ -49,13 +49,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     {
         if (ModelState.IsValid)
         {
-            var requestDTO = new AddIncomeRequestDTO
-            {
-                username = User.Identity.Name, 
-                amount = requestModel.amount,
-                CategoryId = requestModel.CategoryId,
-                date = requestModel.date
-            };
+            var requestDTO = ConstructAddIncomeDTO(requestModel);
 
             var result = await transactionService.AddIncomeAsync(requestDTO);
             if (result)
@@ -114,6 +108,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
         requestModel.Categories = await transactionService.GetExpenseCategoriesAsync();
         return View(requestModel);
     }
+    [Authorize]
     [HttpGet("income-expense-list")]
     public async Task<IActionResult> IncomeExpenseList()
     {
@@ -121,4 +116,21 @@ public class TransactionsController(ITransactionService transactionService) : Co
         return View(incomeExpenseList);  
     }
 
+    [HttpGet("report")]
+    public IActionResult Reporting()
+    {
+        return View();
+    }
+
+    private AddIncomeRequestDTO ConstructAddIncomeDTO(AddIncomeRequestModel value)
+    {
+        //Mapping
+        return new AddIncomeRequestDTO
+        {
+            username = User.Identity.Name,
+            amount = value.amount,
+            CategoryId = value.CategoryId,
+            date = value.date
+        };
+    }
 }

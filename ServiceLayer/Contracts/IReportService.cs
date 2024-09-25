@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.Contracts
 {
-    public interface IReportsService
+    public interface IReportService
     {
     }
 }

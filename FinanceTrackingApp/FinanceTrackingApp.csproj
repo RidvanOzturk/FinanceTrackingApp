@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Categories\" />
-    <Folder Include="Views\Reports\" />
+    <Folder Include="Views\Report\" />
     <Folder Include="Views\Profile\" />
   </ItemGroup>
 
