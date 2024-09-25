@@ -40,7 +40,7 @@
                 <div class="card-body text-center">
                     <a class="btn btn-success btn-lg m-2" href="/Transactions/add-income">Add Income</a>
                     <a class="btn btn-danger btn-lg m-2" href="/Transactions/add-expense">Add Expense</a>
-                    <a class="btn btn-primary btn-lg m-2" href="/Transactions/IncomeExpenseList">Income-Expense List</a>
+                    <a class="btn btn-primary btn-lg m-2" href="/Transactions/income-expense-list">Income-Expense List</a>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
     var chartData = {
         labels: ['Income', 'Expense', 'Balance'],
         datasets: [{
-            data: [@Model.TotalIncome, @Model.TotalExpense, @Model.Balance],
+            data: [parseFloat(@Model.TotalIncome), parseFloat(@Model.TotalExpense), parseFloat(@Model.Balance)],
             backgroundColor: ["#28a745", "#dc3545", "#008080"],
             borderColor: '#ffffff',  
             borderWidth: 3,  

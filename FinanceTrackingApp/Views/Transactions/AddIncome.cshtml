@@ -1,27 +1,48 @@
 ﻿@model FinanceTrackingApp.Models.Requests.AddIncomeRequestModel
 @{
-    ViewData["Title"] = "AddIncome";
+    ViewData["Title"] = "Add Income";
 }
 
-<h1>AddIncome</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
+                    <h2 class="mb-0">Add Income</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddIncome" method="post">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <input type="hidden" name="Categories[@category.Id].Id" value="@category.Id" />
+                            <input type="hidden" name="Categories[@category.Id].Name" value="@category.Name" />
+                            <input type="hidden" name="Categories[@category.Id].Type" value="@category.Type" />
+                        }
+                        <input type="hidden" name="Username" value="@User.Identity.Name" />
 
-<form asp-action="AddIncome" method="post">
-    @foreach (var category in Model.Categories)
-    {
-        <input type="hidden" name="Categories[@category.Id].Id" value="@category.Id" />
-        <input type="hidden" name="Categories[@category.Id].Name" value="@category.Name" />
-        <input type="hidden" name="Categories[@category.Id].Type" value="@category.Type" />
-    }
-    <input type="hidden" name="Username" value="@User.Identity.Name" />
-    <label>Gelir Miktarı:</label>
-    <input type="number" asp-for="amount" />
+                        <div class="form-group mb-3">
+                            <label for="Amount">Income Amount:</label>
+                            <input type="number" class="form-control" asp-for="amount" placeholder="Enter income amount" />
+                        </div>
 
-    <label>Kategori:</label>
-    <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
-        <option value="">Kategori Seçin</option>
-    </select>
+                        <div class="form-group mb-3">
+                            <label for="CategoryId">Category:</label>
+                            <select class="form-select" asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                                <option value="">Select a Category</option>
+                            </select>
+                        </div>
 
-    <label>Gelir Tarihi:</label>
-    <input type="date" id="Date" name="Date" asp-for="date">
-    <button type="submit">Gelir Ekle</button>
-</form>
+                        <div class="form-group mb-3">
+                            <label for="Date">Income Date:</label>
+                            <input type="date" class="form-control" asp-for="date" />
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg">Add Income</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

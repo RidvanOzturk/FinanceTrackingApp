@@ -1,29 +1,48 @@
 ﻿@model FinanceTrackingApp.Models.Requests.AddExpenseRequestModel
 @{
-    ViewData["Title"] = "AddExpense";
+    ViewData["Title"] = "Add Expense";
 }
 
-<h1>AddExpense</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
+                    <h2 class="mb-0">Add Expense</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddExpense" method="post">
+                        @foreach (var category in Model.Categories)
+                        {
+                            <input type="hidden" name="Categories[@category.Id].Id" value="@category.Id" />
+                            <input type="hidden" name="Categories[@category.Id].Name" value="@category.Name" />
+                            <input type="hidden" name="Categories[@category.Id].Type" value="@category.Type" />
+                        }
+                        <input type="hidden" name="Username" value="@User.Identity.Name" />
 
+                        <div class="form-group mb-3">
+                            <label for="Amount">Expense Amount:</label>
+                            <input type="number" class="form-control" asp-for="amount" placeholder="Enter expense amount" />
+                        </div>
 
-<form asp-action="AddExpense" method="post">
-    @foreach (var category in Model.Categories)
-    {
-        <input type="hidden" name="Categories[@category.Id].Id" value="@category.Id" />
-        <input type="hidden" name="Categories[@category.Id].Name" value="@category.Name" />
-        <input type="hidden" name="Categories[@category.Id].Type" value="@category.Type" />
-    }
-    <input type="hidden" name="Username" value="@User.Identity.Name" />
-    <label>Gider Miktarı:</label>
-    <input type="number" asp-for="amount" />
+                        <div class="form-group mb-3">
+                            <label for="CategoryId">Category:</label>
+                            <select class="form-select" asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                                <option value="">Select a Category</option>
+                            </select>
+                        </div>
 
-    <label>Kategori:</label>
-    <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
-        <option value="">Kategori Seçin</option>
-    </select>
+                        <div class="form-group mb-3">
+                            <label for="Date">Expense Date:</label>
+                            <input type="date" class="form-control" asp-for="date" />
+                        </div>
 
-    <label>Gider Tarihi:</label>
-    <input type="date" id="Date" name="Date" asp-for="date">
-    <button type="submit">Gider Ekle</button>
-</form>
-
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-danger btn-lg">Add Expense</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

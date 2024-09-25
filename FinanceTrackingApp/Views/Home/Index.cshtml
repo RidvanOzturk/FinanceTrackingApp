@@ -2,11 +2,21 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <h3 style="text-align:center; margin-top:80px;">
-        Welcome to the finance tracking app :)
-        In this application you can add your income and expenses, check your expenses and get reports.
-        I hope you enjoy it, enjoyable days :)
-    </h3>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="jumbotron bg-light shadow p-5">
+                <h1 class="display-4 font-weight-bold text-primary">Welcome</h1>
+                <p class="lead mt-4">
+                    Welcome to the <span class="text-success">Finance Tracking App</span>!
+                    In this application, you can effortlessly add your income and expenses, monitor your spending, and generate detailed reports.
+                </p>
+                <hr class="my-4">
+                <p class="font-italic">
+                    I hope you find it useful and enjoy managing your finances. Wishing you organized and enjoyable days ahead! :)
+                </p>
+                <a class="btn btn-primary btn-lg mt-3" href="/transactions/add-income" role="button">Get Started</a>
+            </div>
+        </div>
+    </div>
 </div>
