@@ -1,10 +1,12 @@
-﻿using FinanceTrackingApp.Models.Requests;
+﻿using DataLayer.Entities;
+using FinanceTrackingApp.Models.Requests;
 using FinanceTrackingApp.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
 using ServiceLayer.Implementations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace FinanceTrackingApp.Controllers;
 
 [Route("transactions")]
@@ -85,14 +87,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     {
         if (ModelState.IsValid)
         {
-            var requestDTO = new AddExpenseRequestDTO
-            {
-                username = User.Identity.Name,
-                amount = requestModel.amount,
-                CategoryId = requestModel.CategoryId,
-                date = requestModel.date
-            };
-
+            var requestDTO = ConstructAddExpenseDTO(requestModel);
             var result = await transactionService.AddExpenseAsync(requestDTO);
             if (result)
             {
@@ -126,6 +121,16 @@ public class TransactionsController(ITransactionService transactionService) : Co
     {
         //Mapping
         return new AddIncomeRequestDTO
+        {
+            username = User.Identity.Name,
+            amount = value.amount,
+            CategoryId = value.CategoryId,
+            date = value.date
+        };
+    }
+    private AddExpenseRequestDTO ConstructAddExpenseDTO(AddExpenseRequestModel value) 
+    {
+        return new AddExpenseRequestDTO
         {
             username = User.Identity.Name,
             amount = value.amount,

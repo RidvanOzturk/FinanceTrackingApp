@@ -79,15 +79,15 @@ public class TransactionService(FinanceContext context) : ITransactionService
             .Where(e => e.User.Username == username)
             .SumAsync(e => e.Amount);
     }
-    public async Task<List<IncomeExpenseListViewDTO>> GetIncomeExpenseListAsync()
+    public async Task<List<IncomeExpenseListViewModel>> GetIncomeExpenseListAsync()
     {
-        var incomeExpenseList = new List<IncomeExpenseListViewDTO>();
+        var incomeExpenseList = new List<IncomeExpenseListViewModel>();
 
         var incomes = await context.Incomes
             .Include(i => i.Category)
             .ToListAsync();
 
-        incomeExpenseList.AddRange(incomes.Select(i => new IncomeExpenseListViewDTO
+        incomeExpenseList.AddRange(incomes.Select(i => new IncomeExpenseListViewModel
         {
             Id = i.Id,
             CategoryName = i.Category.Name,
@@ -100,7 +100,7 @@ public class TransactionService(FinanceContext context) : ITransactionService
             .Include(e => e.Category)
             .ToListAsync();
 
-        incomeExpenseList.AddRange(expenses.Select(e => new IncomeExpenseListViewDTO
+        incomeExpenseList.AddRange(expenses.Select(e => new IncomeExpenseListViewModel
         {
             Id = e.Id,
             CategoryName = e.Category.Name,
@@ -112,8 +112,7 @@ public class TransactionService(FinanceContext context) : ITransactionService
         return incomeExpenseList;
     }
 
-    //SORULACAK
-    public async Task<ReportingViewDTO> GetReportAsync(DateTime startDate, DateTime endDate, Guid? categoryId)
+    public async Task<ReportingViewModel> GetReportAsync(DateTime startDate, DateTime endDate, Guid? categoryId)
     {
         var query = context.Incomes
             .Where(i => i.Date >= startDate && i.Date <= endDate)
@@ -137,7 +136,7 @@ public class TransactionService(FinanceContext context) : ITransactionService
 
         var totalExpense = await expenseQuery.SumAsync(e => e.Amount);
 
-        return new ReportingViewDTO
+        return new ReportingViewModel
         {
             StartDate = startDate,
             EndDate = endDate,
@@ -154,5 +153,7 @@ public class TransactionService(FinanceContext context) : ITransactionService
                 .ToListAsync()
         };
     }
+    private ReportingViewModel ConsctructReportingModel() 
+    { }
 
 }

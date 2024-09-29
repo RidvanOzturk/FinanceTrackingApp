@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.DTOs
 {
-    public class IncomeExpenseListViewDTO
+    public class IncomeExpenseListViewModel
     {
         public Guid Id { get; set; }  
         public string CategoryName { get; set; }  

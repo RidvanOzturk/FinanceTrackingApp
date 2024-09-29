@@ -14,7 +14,7 @@ namespace ServiceLayer.Implementations
     public class ReportService(FinanceContext context) : IReportService
     {
         //SORULACAK
-        public async Task<ReportingViewDTO> GetReportAsync(DateTime startDate, DateTime endDate, Guid? categoryId)
+        public async Task<ReportingViewModel> GetReportAsync(DateTime startDate, DateTime endDate, Guid? categoryId)
         {
             var query = context.Incomes
                 .Where(i => i.Date >= startDate && i.Date <= endDate);
@@ -37,7 +37,7 @@ namespace ServiceLayer.Implementations
 
             var totalExpense = await expenseQuery.SumAsync(e => e.Amount);
 
-            return new ReportingViewDTO
+            return new ReportingViewModel
             {
                 StartDate = startDate,
                 EndDate = endDate,
