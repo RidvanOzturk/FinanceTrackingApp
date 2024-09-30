@@ -17,5 +17,6 @@ namespace ServiceLayer.Contracts
         Task<decimal> GetTotalIncomeAsync(string username);
         Task<decimal> GetTotalExpenseAsync(string username);
         Task<List<IncomeExpenseListViewModel>> GetIncomeExpenseListAsync();
+        Task DeleteInListAsync(Guid id);
     }
 }

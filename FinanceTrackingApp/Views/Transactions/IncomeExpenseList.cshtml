@@ -19,8 +19,9 @@
                 <td>@item.Date.ToString("dd-MM-yyyy")</td>
                 <td>@item.Type</td>
                 <td>
-                    <a class="btn btn-warning" href="/Transactions/Edit/@item.Id">Edit</a>
-                    <a class="btn btn-danger" href="/Transactions/Delete/@item.Id">Delete</a>
+                    <a asp-action="DeleteDataInList" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    <a asp-action="" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
+
                 </td>
             </tr>
         }

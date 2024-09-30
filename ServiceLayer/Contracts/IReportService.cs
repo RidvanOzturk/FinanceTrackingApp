@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceLayer.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace ServiceLayer.Contracts
 {
     public interface IReportService
     {
+        Task<ReportingViewModel> GetReportAsync(ReportAsyncViewModel model);
+
     }
 }

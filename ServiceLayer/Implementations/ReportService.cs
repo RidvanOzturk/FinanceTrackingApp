@@ -13,35 +13,34 @@ namespace ServiceLayer.Implementations
 {
     public class ReportService(FinanceContext context) : IReportService
     {
-        //SORULACAK
-        public async Task<ReportingViewModel> GetReportAsync(DateTime startDate, DateTime endDate, Guid? categoryId)
+        public async Task<ReportingViewModel> GetReportAsync(ReportAsyncViewModel model)
         {
             var query = context.Incomes
-                .Where(i => i.Date >= startDate && i.Date <= endDate);
-                
-            if (categoryId.HasValue)
+                .Where(i => i.Date >= model.startDate && i.Date <= model.endDate);
+
+            if (model.categoryId.HasValue)
             {
-                query = query.Where(i => i.CategoryId == categoryId.Value);
+                query = query.Where(i => i.CategoryId == model.categoryId.Value);
             }
 
             var totalIncome = await query.SumAsync(i => i.Amount);
 
             var expenseQuery = context.Expenses
-                .Where(e => e.Date >= startDate && e.Date <= endDate)
+                .Where(e => e.Date >= model.startDate && e.Date <= model.endDate)
                 .AsQueryable();
 
-            if (categoryId.HasValue)
+            if (model.categoryId.HasValue)
             {
-                expenseQuery = expenseQuery.Where(e => e.CategoryId == categoryId.Value);
+                expenseQuery = expenseQuery.Where(e => e.CategoryId == model.categoryId.Value);
             }
 
             var totalExpense = await expenseQuery.SumAsync(e => e.Amount);
 
             return new ReportingViewModel
             {
-                StartDate = startDate,
-                EndDate = endDate,
-                CategoryId = categoryId,
+                StartDate = model.startDate,
+                EndDate = model.endDate,
+                CategoryId = model.categoryId,
                 TotalIncome = totalIncome,
                 TotalExpense = totalExpense,
                 Balance = totalIncome - totalExpense,

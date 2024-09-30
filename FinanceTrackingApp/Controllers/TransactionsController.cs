@@ -111,10 +111,11 @@ public class TransactionsController(ITransactionService transactionService) : Co
         return View(incomeExpenseList);  
     }
 
-    [HttpGet("report")]
-    public IActionResult Reporting()
+    [HttpGet("delete/{id:guid}")]
+    public async Task<IActionResult> DeleteDataInList(Guid id)
     {
-        return View();
+        await transactionService.DeleteInListAsync(id);
+        return RedirectToAction("IncomeExpenseList");
     }
 
     private AddIncomeRequestDTO ConstructAddIncomeDTO(AddIncomeRequestModel value)

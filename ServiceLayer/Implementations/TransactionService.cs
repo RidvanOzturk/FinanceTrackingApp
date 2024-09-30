@@ -53,7 +53,22 @@ public class TransactionService(FinanceContext context) : ITransactionService
         var result = await context.SaveChangesAsync();
         return result > 0;
     }
+    public async Task DeleteInListAsync(Guid id)
+    {
+        var deletedExpense = await context.Expenses.FirstOrDefaultAsync(x => x.Id == id);
+        var deletedIncome = await context.Incomes.FirstOrDefaultAsync(x => x.Id == id);
 
+        if (deletedExpense != null)
+        {
+            context.Expenses.Remove(deletedExpense);
+            await context.SaveChangesAsync();
+        }
+        if (deletedIncome != null)
+        {
+            context.Incomes.Remove(deletedIncome);
+            await context.SaveChangesAsync();
+        }
+    }
     public async Task<List<Category>> GetIncomeCategoriesAsync()
     {
         return await context.Categories
@@ -112,48 +127,6 @@ public class TransactionService(FinanceContext context) : ITransactionService
         return incomeExpenseList;
     }
 
-    public async Task<ReportingViewModel> GetReportAsync(DateTime startDate, DateTime endDate, Guid? categoryId)
-    {
-        var query = context.Incomes
-            .Where(i => i.Date >= startDate && i.Date <= endDate)
-            .AsQueryable();
-
-        if (categoryId.HasValue)
-        {
-            query = query.Where(i => i.CategoryId == categoryId.Value);
-        }
-
-        var totalIncome = await query.SumAsync(i => i.Amount);
-
-        var expenseQuery = context.Expenses
-            .Where(e => e.Date >= startDate && e.Date <= endDate)
-            .AsQueryable();
-
-        if (categoryId.HasValue)
-        {
-            expenseQuery = expenseQuery.Where(e => e.CategoryId == categoryId.Value);
-        }
-
-        var totalExpense = await expenseQuery.SumAsync(e => e.Amount);
-
-        return new ReportingViewModel
-        {
-            StartDate = startDate,
-            EndDate = endDate,
-            CategoryId = categoryId,
-            TotalIncome = totalIncome,
-            TotalExpense = totalExpense,
-            Balance = totalIncome - totalExpense,
-            Categories = await context.Categories
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToListAsync()
-        };
-    }
-    private ReportingViewModel ConsctructReportingModel() 
-    { }
-
+    
+ 
 }
