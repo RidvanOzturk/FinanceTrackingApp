@@ -5,14 +5,16 @@ namespace FinanceTrackingApp.Controllers;
 
 public class ReportController(IReportService reportService) : Controller
 {
-    [HttpGet("summary")]
-    public IActionResult GetSummary(DateTime startDate, DateTime endDate)
+    
+
+    [HttpGet("report-summary")]
+    public IActionResult GetSummary()
     {
         return View();
     }
 
-    [HttpGet("breakdown")]
-    public IActionResult GetBreakdown(DateTime startDate, DateTime endDate)
+    [HttpGet("get-report")]
+    public IActionResult GetReport(DateTime startDate, DateTime endDate)
     {
         return View(startDate);
     }
