@@ -1,0 +1,48 @@
+﻿@model ServiceLayer.DTOs.ReportingViewModel
+
+
+<h1>Raporlama</h1>
+
+<div class="container mt-4">
+    <form method="post" asp-action="Index">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label>Tarih Aralığı:</label>
+                <input type="date" asp-for="StartDate" class="form-control" />
+                <input type="date" asp-for="EndDate" class="form-control mt-2" />
+            </div>
+            <div class="col-md-6">
+                <label>Kategori:</label>
+                <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" class="form-control">
+                    <option value="">Tüm Kategoriler</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="incomeExpenseChart" width="400" height="400"></canvas>
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary mt-4">Show</button>
+                <button type="button" class="btn btn-secondary mt-2">Download</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+    var chartData = {
+        labels: ['Income', 'Expense', 'Balance'],
+        datasets: [{
+            data: [@Model.TotalIncome, @Model.TotalExpense, @Model.Balance],
+            backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+        }]
+    };
+
+    var incomeExpenseChart = new Chart(ctx, {
+        type: 'pie',
+        data: chartData,
+    });
+</script>

@@ -1,4 +1,5 @@
 ﻿using DataLayer;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Contracts;
@@ -53,5 +54,12 @@ namespace ServiceLayer.Implementations
                     .ToListAsync()
             };
         }
+        public async Task<List<Category>> GetAllCategoriesAsync()
+        {
+            return await context.Categories
+                .Where(c => c.Type == "Gelir" && c.Type == "Gider")
+                .ToListAsync();
+        }
+
     }
 }
