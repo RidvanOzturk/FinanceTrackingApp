@@ -57,7 +57,6 @@ namespace ServiceLayer.Implementations
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
             return await context.Categories
-                .Where(c => c.Type == "Gelir" && c.Type == "Gider")
                 .ToListAsync();
         }
 

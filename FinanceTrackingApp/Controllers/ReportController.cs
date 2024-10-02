@@ -14,19 +14,17 @@ public class ReportController(IReportService reportService) : Controller
     public async Task<IActionResult> GetSummary()
     {
         var categories = await reportService.GetAllCategoriesAsync();
-
-        var model = new ReportingViewModel
+        // ----------- --------------
+        var reportingViewModel = new ReportingViewModel
         {
-            StartDate = DateTime.Now.AddMonths(-1), 
-            EndDate = DateTime.Now,
             Categories = categories.Select(c => new SelectListItem
             {
                 Value = c.Id.ToString(),
                 Text = c.Name
-            }).ToList() 
+            }).ToList()
         };
 
-        return View(model);
+        return View(reportingViewModel);
     }
     [HttpGet("get-report")]
     public IActionResult GetReport(DateTime startDate, DateTime endDate)
