@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
+using ServiceLayer.Implementations;
 
 namespace FinanceTrackingApp.Controllers;
 
@@ -18,26 +19,22 @@ public class ReportController(IReportService reportService) : Controller
         {
             try
             {
-                // Tarih aralığını '-' ile ayırıyoruz ve trim ile boşlukları temizliyoruz
                 var dates = daterange.Split('-');
                 startDate = DateTime.ParseExact(dates[0].Trim(), "dd-MM-yyyy", null);
                 endDate = DateTime.ParseExact(dates[1].Trim(), "dd-MM-yyyy", null);
             }
             catch (Exception ex)
             {
-                // Eğer hata olursa varsayılan son 30 günü kullanıyoruz
                 startDate = DateTime.Now.AddDays(-30);
                 endDate = DateTime.Now;
             }
         }
         else
         {
-            // Eğer tarih aralığı gelmezse varsayılan olarak son 30 gün kullanıyoruz
             startDate = DateTime.Now.AddDays(-30);
             endDate = DateTime.Now;
         }
 
-        // Verileri rapor servisinden alıyoruz
         var reportModel = new ReportAsyncViewModel
         {
             startDate = startDate,
@@ -45,10 +42,8 @@ public class ReportController(IReportService reportService) : Controller
             categoryId = categoryId
         };
 
-        // Rapor verilerini getiriyoruz
         var reportingViewModel = await reportService.GetReportAsync(reportModel);
 
-        // Kategorileri de ekliyoruz
         var categories = await reportService.GetAllCategoriesAsync();
         reportingViewModel.Categories = categories.Select(c => new SelectListItem
         {
@@ -59,7 +54,29 @@ public class ReportController(IReportService reportService) : Controller
         return View(reportingViewModel);
     }
 
+    [HttpPost("generate-report")]
+    public async Task<IActionResult> GenerateReport(string daterange, Guid? categoryId)
+    {
+        var dates = daterange?.Split('-');
+        if (dates.Length == 2 && DateTime.TryParse(dates[0], out DateTime startDate) && DateTime.TryParse(dates[1], out DateTime endDate))
+        {
+           
+            var reportType = Request.Form["reportType"]; // "pdf" / "excel" 
 
+            if (reportType == "pdf")
+            {
+                var pdf = GeneratePdf(reportData);
+                return File(pdf, "application/pdf", "report.pdf");
+            }
+            else if (reportType == "excel")
+            {
+                var excel = GenerateExcel(reportData);
+                return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "report.xlsx");
+            }
+        }
+
+        return BadRequest("Invalid date range or category.");
+    }
 
 
     [HttpPost("download-report")]
@@ -67,4 +84,7 @@ public class ReportController(IReportService reportService) : Controller
     {
         return Ok();
     }
+
+
+
 }
