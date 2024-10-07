@@ -60,6 +60,11 @@
     </header>
     <div class="container flex-grow-1">
         @RenderBody()
+
+        @if (IsSectionDefined("ControlsSection"))
+        {
+            @RenderSection("ControlsSection", required: false)
+        }
     </div>
     <footer>
         <p>&copy; 2024 - Finance Tracking App - FBR</p>

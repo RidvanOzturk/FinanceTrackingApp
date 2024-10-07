@@ -16,19 +16,18 @@ namespace ServiceLayer.Implementations
     {
         public async Task<ReportingViewModel> GetReportAsync(ReportAsyncViewModel model)
         {
-            var query = context.Incomes
+            var incomeQuery = context.Incomes
                 .Where(i => i.Date >= model.startDate && i.Date <= model.endDate);
 
             if (model.categoryId.HasValue)
             {
-                query = query.Where(i => i.CategoryId == model.categoryId.Value);
+                incomeQuery = incomeQuery.Where(i => i.CategoryId == model.categoryId.Value);
             }
 
-            var totalIncome = await query.SumAsync(i => i.Amount);
+            var totalIncome = await incomeQuery.SumAsync(i => i.Amount);
 
             var expenseQuery = context.Expenses
-                .Where(e => e.Date >= model.startDate && e.Date <= model.endDate)
-                .AsQueryable();
+                .Where(e => e.Date >= model.startDate && e.Date <= model.endDate);
 
             if (model.categoryId.HasValue)
             {
@@ -50,10 +49,10 @@ namespace ServiceLayer.Implementations
                     {
                         Value = c.Id.ToString(),
                         Text = c.Name
-                    })
-                    .ToListAsync()
+                    }).ToListAsync()
             };
         }
+
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
             return await context.Categories

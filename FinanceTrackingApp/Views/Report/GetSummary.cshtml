@@ -1,15 +1,18 @@
 ﻿@model ServiceLayer.DTOs.ReportingViewModel
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1.0/daterangepicker.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1.0/daterangepicker.min.js"></script>
 
-
-<h1>Raporlama</h1>
-
+</head>
 <div class="container mt-4">
-    <form method="post" asp-action="Index">
+    <form method="get" asp-action="GetSummary">
         <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Tarih Aralığı:</label>
-                <input type="date" asp-for="StartDate" class="form-control" />
-                <input type="date" asp-for="EndDate" class="form-control mt-2" />
+            <div class="form-group">
+                <label for="daterange">Tarih Aralığı:</label>
+                <input type="text" id="daterange" class="form-control" name="daterange" />
             </div>
             <div class="col-md-6">
                 <label>Kategori:</label>
@@ -23,20 +26,31 @@
                 <canvas id="incomeExpenseChart" width="400" height="400"></canvas>
             </div>
             <div class="col-md-6">
-                <button type="submit" class="btn btn-primary mt-4">Show</button>
-                <button type="button" class="btn btn-secondary mt-2">Download</button>
+                <button type="submit" class="btn btn-success btn-lg">Show</button>
+                <button type="submit" formaction="/download-report" class="btn btn-secondary mt-2">Download</button>
             </div>
         </div>
     </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#daterange').daterangepicker({
+            locale: {
+                format: 'DD-MM-YYYY'
+            },
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment()
+        });
+    });
+</script>
 <script>
     var ctx = document.getElementById('incomeExpenseChart').getContext('2d');
     var chartData = {
         labels: ['Income', 'Expense', 'Balance'],
         datasets: [{
-            data: [@Model.TotalIncome, @Model.TotalExpense, @Model.Balance],
+            data: [@Model.TotalIncomeFloat, @Model.TotalExpenseFloat, @Model.BalanceFloat],
             backgroundColor: ['#28a745', '#dc3545', '#ffc107']
         }]
     };
