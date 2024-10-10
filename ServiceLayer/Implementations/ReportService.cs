@@ -58,6 +58,48 @@ namespace ServiceLayer.Implementations
             return await context.Categories
                 .ToListAsync();
         }
+        public async Task<List<IncomeExpenseListViewModel>> GetReportDataAsync(ReportAsyncViewModel model)
+        {
+            var incomesQuery = context.Incomes
+                .Where(i => i.Date >= model.startDate && i.Date <= model.endDate);
 
+            if (model.categoryId.HasValue)
+            {
+                incomesQuery = incomesQuery.Where(i => i.CategoryId == model.categoryId.Value);
+            }
+
+            var incomes = await incomesQuery
+                .Select(i => new IncomeExpenseListViewModel
+                {
+                    Id = i.Id,
+                    CategoryName = i.Category.Name,
+                    Amount = i.Amount,
+                    Date = i.Date,
+                    Type = "Income" 
+                })
+                .ToListAsync();
+
+            var expensesQuery = context.Expenses
+                .Where(e => e.Date >= model.startDate && e.Date <= model.endDate);
+
+            if (model.categoryId.HasValue)
+            {
+                expensesQuery = expensesQuery.Where(e => e.CategoryId == model.categoryId.Value);
+            }
+
+            var expenses = await expensesQuery
+                .Select(e => new IncomeExpenseListViewModel
+                {
+                    Id = e.Id,
+                    CategoryName = e.Category.Name,
+                    Amount = e.Amount,
+                    Date = e.Date,
+                    Type = "Expense"
+                })
+                .ToListAsync();
+
+            var combinedReport = incomes.Concat(expenses).ToList();
+            return combinedReport;
+        }
     }
 }
