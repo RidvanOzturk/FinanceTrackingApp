@@ -27,13 +27,15 @@
                 }
             </select>
         </div>
-        <div>
+        <div style="text-align:center">
             <button type="submit" name="reportType" value="pdf" class="btn btn-primary">Download PDF</button>
             <button type="submit" name="reportType" value="excel" class="btn btn-success">Download Excel</button>
         </div>
     </form>
 
-    <canvas id="incomeExpenseChart" width="400" height="400"></canvas>
+    <div style="max-width: 450px; max-height: 450px; margin: auto;">
+        <canvas id="incomeExpenseChart" width="450" height="450"></canvas>
+    </div>
 </div>
 
 <script>

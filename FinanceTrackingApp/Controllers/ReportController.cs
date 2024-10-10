@@ -7,6 +7,7 @@ using OfficeOpenXml;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
 using ServiceLayer.Implementations;
+using FinanceTrackingApp.Models.Responses;
 
 namespace FinanceTrackingApp.Controllers;
 
@@ -17,6 +18,13 @@ public class ReportController(IReportService reportService) : Controller
     public async Task<IActionResult> GetSummary()
     {
         var categories = await reportService.GetAllCategoriesAsync();
+        var username = User.Identity.Name;
+
+        var totalIncome = await reportService.GetTotalIncomeAsync(username);
+        var totalExpense = await reportService.GetTotalExpenseAsync(username);
+
+        var balance = totalIncome - totalExpense;
+
         var reportingViewModel = new ReportingViewModel
         {
             Categories = categories.Select(c => new SelectListItem
@@ -24,8 +32,11 @@ public class ReportController(IReportService reportService) : Controller
                 Value = c.Id.ToString(),
                 Text = c.Name
             }).ToList(),
-            StartDate = DateTime.Now.AddDays(-30), 
-            EndDate = DateTime.Now
+            StartDate = DateTime.Now.AddDays(-30),
+            EndDate = DateTime.Now,
+            TotalIncome = totalIncome,
+            TotalExpense = totalExpense,
+            Balance = balance
         };
         return View(reportingViewModel);
     }
@@ -69,7 +80,7 @@ public class ReportController(IReportService reportService) : Controller
                 worksheet.Cells[i + 2, 1].Value = reportData[i].CategoryName;
                 worksheet.Cells[i + 2, 2].Value = reportData[i].Amount;
                 worksheet.Cells[i + 2, 3].Value = reportData[i].Date.ToString("dd-MM-yyyy");
-                worksheet.Cells[i + 2, 4].Value = reportData[i].Type; 
+                worksheet.Cells[i + 2, 4].Value = reportData[i].Type;
             }
 
             return package.GetAsByteArray();

@@ -101,5 +101,17 @@ namespace ServiceLayer.Implementations
             var combinedReport = incomes.Concat(expenses).ToList();
             return combinedReport;
         }
+        public async Task<decimal> GetTotalIncomeAsync(string username)
+        {
+            return await context.Incomes
+                .Where(i => i.User.Username == username)
+                .SumAsync(i => i.Amount);
+        }
+        public async Task<decimal> GetTotalExpenseAsync(string username)
+        {
+            return await context.Expenses
+                .Where(e => e.User.Username == username)
+                .SumAsync(e => e.Amount);
+        }
     }
 }

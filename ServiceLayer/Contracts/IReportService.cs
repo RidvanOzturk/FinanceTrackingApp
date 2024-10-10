@@ -13,6 +13,9 @@ namespace ServiceLayer.Contracts
         Task<ReportingViewModel> GetReportAsync(ReportAsyncViewModel model);
         Task<List<Category>> GetAllCategoriesAsync();
         Task<List<IncomeExpenseListViewModel>> GetReportDataAsync(ReportAsyncViewModel model);
+        Task<decimal> GetTotalIncomeAsync(string username);
+        Task<decimal> GetTotalExpenseAsync(string username);
+
 
     }
 }
