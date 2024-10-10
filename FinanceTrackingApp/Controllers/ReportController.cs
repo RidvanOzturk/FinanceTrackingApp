@@ -14,64 +14,23 @@ public class ReportController(IReportService reportService) : Controller
 {
     [Authorize]
     [HttpGet("report-summary")]
-    public async Task<IActionResult> GetSummary(string daterange, Guid? categoryId)
+    public async Task<IActionResult> GetSummary()
     {
-        DateTime startDate, endDate;
-
-        if (!string.IsNullOrEmpty(daterange))
-        {
-            try
-            {
-                var dates = daterange.Split('-');
-                startDate = DateTime.ParseExact(dates[0].Trim(), "dd/MM/yyyy", null);
-                endDate = DateTime.ParseExact(dates[1].Trim(), "dd/MM/yyyy", null);
-            }
-            catch (Exception ex)
-            {
-                startDate = DateTime.Now.AddDays(-30); 
-                endDate = DateTime.Now;
-            }
-        }
-        else
-        {
-            startDate = DateTime.Now.AddDays(-30); 
-            endDate = DateTime.Now;
-        }
-
-        var reportModel = new ReportAsyncViewModel
-        {
-            startDate = startDate,
-            endDate = endDate,
-            categoryId = categoryId
-        };
-
-        var reportingViewModel = await reportService.GetReportAsync(reportModel);
         var categories = await reportService.GetAllCategoriesAsync();
-        reportingViewModel.Categories = categories.Select(c => new SelectListItem
+        var reportingViewModel = new ReportingViewModel
         {
-            Value = c.Id.ToString(),
-            Text = c.Name
-        }).ToList();
-
+            Categories = categories.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.Name
+            }).ToList()
+        };
         return View(reportingViewModel);
     }
 
-    [HttpPost("generate-report")]
-    public async Task<IActionResult> GenerateReport(string daterange, Guid? categoryId)
+    [HttpGet("generate-report")]
+    public async Task<IActionResult> GenerateReport(DateTime startDate, DateTime endDate, Guid? categoryId, string reportType)
     {
-        DateTime startDate, endDate;
-
-        if (!string.IsNullOrEmpty(daterange))
-        {
-            var dates = daterange.Split('-');
-            startDate = DateTime.ParseExact(dates[0].Trim(), "dd/MM/yyyy", null);
-            endDate = DateTime.ParseExact(dates[1].Trim(), "dd/MM/yyyy", null);
-        }
-        else
-        {
-            startDate = DateTime.Now.AddDays(-30); 
-            endDate = DateTime.Now;
-        }
         var generateReportModel = new ReportAsyncViewModel
         {
             startDate = startDate,
@@ -79,8 +38,6 @@ public class ReportController(IReportService reportService) : Controller
             categoryId = categoryId
         };
         var reportData = await reportService.GetReportDataAsync(generateReportModel);
-
-        var reportType = Request.Form["reportType"]; 
 
         if (reportType == "pdf")
         {
@@ -95,6 +52,7 @@ public class ReportController(IReportService reportService) : Controller
 
         return BadRequest("Invalid report type.");
     }
+
 
 
     private byte[] GenerateExcel(List<IncomeExpenseListViewModel> reportData)

@@ -7,40 +7,42 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1.0/daterangepicker.min.js"></script>
 </head>
 <div class="container mt-4">
-    <form method="get" asp-action="GetSummary">
-        <div class="row mb-3">
-            <div class="form-group">
-                <label for="daterange">Tarih Aralığı:</label>
-                <input type="text" id="daterange" class="form-control" name="daterange" />
-            </div>
-            <div class="col-md-6">
-                <label>Kategori:</label>
-                <select asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))" class="form-control">
-                    <option value="">Tüm Kategoriler</option>
-                </select>
-            </div>
+    <form method="get" asp-action="GenerateReport">
+        <div>
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" required />
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <canvas id="incomeExpenseChart" width="400" height="400"></canvas>
-            </div>
-            <div class="col-md-6">
-                <button type="submit" class="btn btn-success btn-lg" name="reportType" value="pdf">Show PDF</button>
-                <button type="submit" class="btn btn-success btn-lg" name="reportType" value="excel">Show Excel</button>
-
-            </div>
+        <div>
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" required />
+        </div>
+        <div>
+            <label for="categoryId">Category:</label>
+            <select id="categoryId" name="categoryId">
+                <option value="">All</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Value">@category.Text</option>
+                }
+            </select>
+        </div>
+        <div>
+            <button type="submit" name="reportType" value="pdf">Download PDF</button>
+            <button type="submit" name="reportType" value="excel">Download Excel</button>
         </div>
     </form>
+  
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript">
+
+<script>
     $(function () {
         $('#daterange').daterangepicker({
             locale: {
-                format: 'DD-MM-YYYY'
+                format: 'DD/MM/YYYY'
             },
-            startDate: moment().subtract(29, 'days'),
+            startDate: moment().subtract(30, 'days'),
             endDate: moment()
         });
     });
