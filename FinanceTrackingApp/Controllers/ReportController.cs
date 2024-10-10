@@ -23,8 +23,11 @@ public class ReportController(IReportService reportService) : Controller
             {
                 Value = c.Id.ToString(),
                 Text = c.Name
-            }).ToList()
+            }).ToList(),
+            StartDate = DateTime.Now.AddDays(-30), // Default to last 30 days
+            EndDate = DateTime.Now
         };
+
         return View(reportingViewModel);
     }
 
@@ -37,6 +40,7 @@ public class ReportController(IReportService reportService) : Controller
             endDate = endDate,
             categoryId = categoryId
         };
+
         var reportData = await reportService.GetReportDataAsync(generateReportModel);
 
         if (reportType == "pdf")
@@ -53,8 +57,6 @@ public class ReportController(IReportService reportService) : Controller
         return BadRequest("Invalid report type.");
     }
 
-
-
     private byte[] GenerateExcel(List<IncomeExpenseListViewModel> reportData)
     {
         using (var package = new ExcelPackage())
@@ -63,19 +65,20 @@ public class ReportController(IReportService reportService) : Controller
             worksheet.Cells[1, 1].Value = "Category";
             worksheet.Cells[1, 2].Value = "Amount";
             worksheet.Cells[1, 3].Value = "Date";
-            worksheet.Cells[1, 4].Value = "Type";  
+            worksheet.Cells[1, 4].Value = "Type"; // Income/Expense
 
             for (int i = 0; i < reportData.Count; i++)
             {
                 worksheet.Cells[i + 2, 1].Value = reportData[i].CategoryName;
                 worksheet.Cells[i + 2, 2].Value = reportData[i].Amount;
                 worksheet.Cells[i + 2, 3].Value = reportData[i].Date.ToString("dd-MM-yyyy");
-                worksheet.Cells[i + 2, 4].Value = reportData[i].Type;  
+                worksheet.Cells[i + 2, 4].Value = reportData[i].Type; // Income/Expense type
             }
 
             return package.GetAsByteArray();
         }
     }
+
     private byte[] GeneratePdf(List<IncomeExpenseListViewModel> reportData)
     {
         using (var memoryStream = new MemoryStream())

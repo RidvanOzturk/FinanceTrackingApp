@@ -1,52 +1,41 @@
 ﻿@model ServiceLayer.DTOs.ReportingViewModel
+
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1.0/daterangepicker.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1.0/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <div class="container mt-4">
     <form method="get" asp-action="GenerateReport">
-        <div>
+        <div class="form-group">
             <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate" required />
+            <input type="date" id="startDate" name="startDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" class="form-control" required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" required />
+            <input type="date" id="endDate" name="endDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" class="form-control" required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="categoryId">Category:</label>
-            <select id="categoryId" name="categoryId">
+            <select id="categoryId" name="categoryId" class="form-control">
                 <option value="">All</option>
                 @foreach (var category in Model.Categories)
                 {
-                    <option value="@category.Value">@category.Text</option>
+                    <option value="@category.Value" selected="@(category.Value == Model.CategoryId.ToString())">@category.Text</option>
                 }
             </select>
         </div>
         <div>
-            <button type="submit" name="reportType" value="pdf">Download PDF</button>
-            <button type="submit" name="reportType" value="excel">Download Excel</button>
+            <button type="submit" name="reportType" value="pdf" class="btn btn-primary">Download PDF</button>
+            <button type="submit" name="reportType" value="excel" class="btn btn-success">Download Excel</button>
         </div>
     </form>
-  
+
+    <canvas id="incomeExpenseChart" width="400" height="400"></canvas>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    $(function () {
-        $('#daterange').daterangepicker({
-            locale: {
-                format: 'DD/MM/YYYY'
-            },
-            startDate: moment().subtract(30, 'days'),
-            endDate: moment()
-        });
-    });
-</script>
 <script>
     var ctx = document.getElementById('incomeExpenseChart').getContext('2d');
     var chartData = {
