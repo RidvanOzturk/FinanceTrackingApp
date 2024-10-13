@@ -72,14 +72,14 @@ public class TransactionService(FinanceContext context) : ITransactionService
     public async Task<List<Category>> GetIncomeCategoriesAsync()
     {
         return await context.Categories
-            .Where(c => c.Type == "Gelir")
+            .Where(c => c.Type == "Income")
             .ToListAsync();
     }
 
     public async Task<List<Category>> GetExpenseCategoriesAsync()
     {
         return await context.Categories
-            .Where(c => c.Type == "Gider")
+            .Where(c => c.Type == "Expense")
             .ToListAsync();
     }
     public async Task<decimal> GetTotalIncomeAsync(string username)

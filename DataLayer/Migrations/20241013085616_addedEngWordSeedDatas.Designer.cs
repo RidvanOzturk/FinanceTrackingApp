@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(FinanceContext))]
-    [Migration("20240924160213_addedExpensesSeedData")]
-    partial class addedExpensesSeedData
+    [Migration("20241013085616_addedEngWordSeedDatas")]
+    partial class addedEngWordSeedDatas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,57 +46,57 @@ namespace DataLayer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8d4c867f-fe8c-440a-ad7f-a6d05e9487bd"),
-                            Name = "Maaş",
-                            Type = "Gelir"
+                            Id = new Guid("a3e2766a-01e4-47c7-8ec7-5dad220c061b"),
+                            Name = "Salary",
+                            Type = "Income"
                         },
                         new
                         {
-                            Id = new Guid("47fc5307-72f6-4214-8ef2-bfd9589ae17f"),
-                            Name = "Kira Geliri",
-                            Type = "Gelir"
+                            Id = new Guid("53cdcf36-9a0e-4d8b-80d7-75016c2fc359"),
+                            Name = "Rental Income",
+                            Type = "Income"
                         },
                         new
                         {
-                            Id = new Guid("7fc75b7a-cbef-4199-887a-ad239d4bd503"),
-                            Name = "Yatırım Geliri",
-                            Type = "Gelir"
+                            Id = new Guid("0d4680d4-c0b4-4309-b428-28b5b70a73db"),
+                            Name = "Investment Income",
+                            Type = "Income"
                         },
                         new
                         {
-                            Id = new Guid("82500fea-e057-4a17-a3a1-ba064b4841a6"),
-                            Name = "Diğer Gelirler",
-                            Type = "Gelir"
+                            Id = new Guid("7d4e4476-2a57-4f35-aaeb-734ed723a16d"),
+                            Name = "Other Income",
+                            Type = "Income"
                         },
                         new
                         {
-                            Id = new Guid("75b4d483-a608-4d39-8d41-c79966001827"),
-                            Name = "Kira Gideri",
-                            Type = "Gider"
+                            Id = new Guid("de6f3915-de14-4ab3-a858-24fca0eae158"),
+                            Name = "Rent Expense",
+                            Type = "Expense"
                         },
                         new
                         {
-                            Id = new Guid("be0b84d8-4bd4-4c8e-8b90-c268a4485b99"),
-                            Name = "Eğitim Gideri",
-                            Type = "Gider"
+                            Id = new Guid("080cd899-ef20-4772-bc31-b0067e6a55d6"),
+                            Name = "Education Expense",
+                            Type = "Expense"
                         },
                         new
                         {
-                            Id = new Guid("ef449199-0456-4eb7-b2e4-8e3bcb1573df"),
-                            Name = "Eğlence Gideri",
-                            Type = "Gider"
+                            Id = new Guid("760b54d9-1f32-47a2-a108-ab4a51577c1d"),
+                            Name = "Entertainment Expense",
+                            Type = "Expense"
                         },
                         new
                         {
-                            Id = new Guid("d854684d-7f66-4e35-b827-79d0f9c4fa90"),
-                            Name = "Araba Gideri",
-                            Type = "Gider"
+                            Id = new Guid("ba21eb0b-7fca-4b48-bfc6-e41187cf9233"),
+                            Name = "Car Expense",
+                            Type = "Expense"
                         },
                         new
                         {
-                            Id = new Guid("2fefcd3b-5b33-49ae-a58d-9ad2bc066bd0"),
-                            Name = "Diğer Giderler",
-                            Type = "Gider"
+                            Id = new Guid("c8b42480-99bb-4b89-b7bb-7671d2bfff0d"),
+                            Name = "Other Expenses",
+                            Type = "Expense"
                         });
                 });
 
