@@ -47,7 +47,16 @@ To run this project locally, follow the steps below:
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/RidvanOzturk/FinanceTrackingApp.git
-   
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd FinanceTrackingApp
+3. **Run Database Migrations**:
+   ```bash
+   dotnet ef database update
+4. **Run the Application**:
+   ```bash
+   dotnet run
+    
 ### Important
 Make sure to update the `appsettings.json` file with the correct connection string to match your SQL Server instance. This step is necessary for the application to connect to the database and run properly.
 
