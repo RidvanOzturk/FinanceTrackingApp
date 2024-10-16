@@ -2,7 +2,7 @@
 
 Finance Tracking Application is a comprehensive tool designed to help users manage their personal finances effectively. Built with **ASP.NET MVC**, **Entity Framework (EF)** as the ORM tool, this application allows users to track their income and expenses by category, offering powerful features like visual data representation and detailed reporting.
 
-https://github.com/user-attachments/assets/ecee1a10-8f87-4c0b-9dca-991d9c7c10fb
+https://github.com/user-attachments/assets/95883233-f3f5-4e5a-8111-59dcd6629968
 
 ## Features
 
@@ -47,7 +47,16 @@ To run this project locally, follow the steps below:
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/RidvanOzturk/FinanceTrackingApp.git
-   
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd FinanceTrackingApp
+3. **Run Database Migrations**:
+   ```bash
+   dotnet ef database update
+4. **Run the Application**:
+   ```bash
+   dotnet run
+    
 ### Important
 Make sure to update the `appsettings.json` file with the correct connection string to match your SQL Server instance. This step is necessary for the application to connect to the database and run properly.
 
