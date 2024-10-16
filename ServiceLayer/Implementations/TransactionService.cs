@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DataLayer.Entities;
+using DataLayer.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Contracts;
@@ -12,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.Implementations;
 
-public class TransactionService(FinanceContext context) : ITransactionService
+public class TransactionService(ITransactionRepository transactionRepository) : ITransactionService
 {
     public async Task<bool> AddIncomeAsync(AddIncomeRequestDTO model)
     {
-        var user = await context.Users.FirstOrDefaultAsync(x => x.Username == model.username);
+        var user = await transactionRepository.GetByName(model.username);
         if (user == null)
         {
             return false; 
@@ -29,14 +30,14 @@ public class TransactionService(FinanceContext context) : ITransactionService
             CategoryId = model.CategoryId,
             UserId = user.Id     
         };
-        await context.Incomes.AddAsync(income);
-        var result = await context.SaveChangesAsync();
-        return result > 0;
+        await transactionRepository.AddIncomeAsync(income);
+        var result =  transactionRepository.CommitAsync();
+        return result != null;
     }
 
     public async Task<bool> AddExpenseAsync(AddExpenseRequestDTO model)
     {
-        var user = await context.Users.FirstOrDefaultAsync(x => x.Username == model.username);
+        var user = transactionRepository.GetByName(model.username);
         if (user == null)
         {
             return false;
@@ -49,14 +50,14 @@ public class TransactionService(FinanceContext context) : ITransactionService
             CategoryId = model.CategoryId,
             UserId = user.Id
         };
-        await context.Expenses.AddAsync(expense);
-        var result = await context.SaveChangesAsync();
-        return result > 0;
+        await transactionRepository.AddExpenseAsync(expense);
+        var result = transactionRepository.CommitAsync();
+        return result != null;
     }
     public async Task DeleteInListAsync(Guid id)
     {
-        var deletedExpense = await context.Expenses.FirstOrDefaultAsync(x => x.Id == id);
-        var deletedIncome = await context.Incomes.FirstOrDefaultAsync(x => x.Id == id);
+        var deletedExpense = transactionRepository.GetByIdExpensesAsync(id);
+        var deletedIncome = transactionRepository.GetByIdIncomesAsync(id);
 
         if (deletedExpense != null)
         {

@@ -9,8 +9,7 @@ public interface IUserRepository
     Task Delete(User user);
     Task<User> GetById(int id);
     Task<List<User>> GetAll();
-    Task<User?> GetByNameAsync(string name);
-    Task<User> Get(string name, string email);
-    Task<User> Get(string name, string email, string address);
+    Task<User?> GetByNameandEmailAsync(string name, string mail);
+
     Task CommitAsync();
 }

@@ -13,7 +13,7 @@ public class UserRepository(FinanceContext financeContext) : IUserRepository
 {
     public async Task Create(User user)
     {
-        financeContext.Users.Add(user);
+        financeContext.Users.AddAsync(user);
     }
 
     public async Task Delete(User user)
@@ -32,10 +32,10 @@ public class UserRepository(FinanceContext financeContext) : IUserRepository
         throw new NotImplementedException();
     }
 
-    public async Task<User?> GetByNameAsync(string name)
+    public async Task<User?> GetByNameandEmailAsync(string name, string mail)
     {
         return await financeContext.Users
-            .FirstOrDefaultAsync(x => x.Username == name);
+            .FirstOrDefaultAsync(x => x.Username == name || x.Email == mail);
     }
 
     public Task Update(User user)

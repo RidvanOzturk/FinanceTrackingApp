@@ -23,19 +23,8 @@ namespace ServiceLayer.Implementations
     {
         public async Task<bool> RegisterAsync(RegisterRequestDTO requestDTO)
         {
-            var user = await userRepository.GetByNameAsync(requestDTO.username);
-
-            await userRepository.Create(user);
-            await userRepository.Create(user);
-            await userRepository.Create(user);
-
-            await userRepository.CommitAsync();
-
-            IUserRepository userRepository = new UserRepository();
-
-
-            //var existingUser = await context.Users.FirstOrDefaultAsync(x => x.Username == requestDTO.username || x.Email == requestDTO.email);
-            if (existingUser != null)
+            var user = await userRepository.GetByNameandEmailAsync(requestDTO.username,requestDTO.email);
+            if (user != null)
             {
                 return false;
             }
@@ -50,15 +39,15 @@ namespace ServiceLayer.Implementations
                 PasswordHash = hashedPassword 
             };
 
-            await context.Users.AddAsync(newUser);
-            var result = await context.SaveChangesAsync();
+            await userRepository.Create(newUser);
+            var result = userRepository.CommitAsync();
 
-            return result > 0;
+            return result != null;
         }
 
         public async Task<List<Claim>> LoginAsync(string username, string password)
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Username == username || x.Email == username);
+            var user = await userRepository.GetByNameandEmailAsync(username, password);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
             {
                 return new List<Claim>();
