@@ -23,17 +23,16 @@ namespace DataLayer
                 .HasForeignKey(e => e.UserId);
 
             modelBuilder.Entity<Category>().HasData(
-      new Category { Id = Guid.NewGuid(), Name = "Salary", Type = "Income" },
-      new Category { Id = Guid.NewGuid(), Name = "Rental Income", Type = "Income" },
-      new Category { Id = Guid.NewGuid(), Name = "Investment Income", Type = "Income" },
-      new Category { Id = Guid.NewGuid(), Name = "Other Income", Type = "Income" },
+              new Category { Id = Guid.NewGuid(), Name = "Salary", Type = "Income" },
+              new Category { Id = Guid.NewGuid(), Name = "Rental Income", Type = "Income" },
+              new Category { Id = Guid.NewGuid(), Name = "Investment Income", Type = "Income" },
+              new Category { Id = Guid.NewGuid(), Name = "Other Income", Type = "Income" },
 
-      new Category { Id = Guid.NewGuid(), Name = "Rent Expense", Type = "Expense" },
-      new Category { Id = Guid.NewGuid(), Name = "Education Expense", Type = "Expense" },
-      new Category { Id = Guid.NewGuid(), Name = "Entertainment Expense", Type = "Expense" },
-      new Category { Id = Guid.NewGuid(), Name = "Car Expense", Type = "Expense" },
-      new Category { Id = Guid.NewGuid(), Name = "Other Expenses", Type = "Expense" }
-  );
+              new Category { Id = Guid.NewGuid(), Name = "Rent Expense", Type = "Expense" },
+              new Category { Id = Guid.NewGuid(), Name = "Education Expense", Type = "Expense" },
+              new Category { Id = Guid.NewGuid(), Name = "Entertainment Expense", Type = "Expense" },
+              new Category { Id = Guid.NewGuid(), Name = "Car Expense", Type = "Expense" },
+              new Category { Id = Guid.NewGuid(), Name = "Other Expenses", Type = "Expense" });
 
             base.OnModelCreating(modelBuilder);
 

@@ -9,6 +9,7 @@ using ServiceLayer.DTOs;
 using ServiceLayer.Implementations;
 using FinanceTrackingApp.Models.Responses;
 using FinanceTrackingApp.Models.Requests;
+using FinanceTrackingApp.Extensions;
 
 namespace FinanceTrackingApp.Controllers;
 
@@ -44,12 +45,8 @@ public class ReportController(IReportService reportService) : Controller
     [HttpGet("generate-report")]
     public async Task<IActionResult> GenerateReport(GenerateReportRequestModel requestModel)
     {
-        var generateReportModel = new ReportAsyncViewModel
-        {
-            startDate = requestModel.startDate,
-            endDate = requestModel.endDate,
-            categoryId = requestModel.categoryId
-        };
+        var generateReportModel = requestModel.Map();
+
         var reportData = await reportService.GetReportDataAsync(generateReportModel);
 
         if (requestModel.reportType == "pdf")
@@ -57,7 +54,8 @@ public class ReportController(IReportService reportService) : Controller
             var pdf = GeneratePdf(reportData);
             return File(pdf, "application/pdf", "report.pdf");
         }
-        else if (requestModel.reportType == "excel")
+
+        if (requestModel.reportType == "excel")
         {
             var excel = GenerateExcel(reportData);
             return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "report.xlsx");
@@ -104,8 +102,4 @@ public class ReportController(IReportService reportService) : Controller
             return memoryStream.ToArray();
         }
     }
-
-
-
-
 }

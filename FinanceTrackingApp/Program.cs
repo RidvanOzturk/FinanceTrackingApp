@@ -1,4 +1,6 @@
 using DataLayer;
+using DataLayer.Repositories.Contracts;
+using DataLayer.Repositories.Implementations;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Contracts;
@@ -23,6 +25,9 @@ builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

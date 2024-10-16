@@ -13,15 +13,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using DataLayer.Repositories.Contracts;
+using DataLayer.Repositories.Implementations;
 
 
 namespace ServiceLayer.Implementations
 {
-    public class AuthService(IHttpContextAccessor httpContextAccessor ,FinanceContext context, IConfiguration configuration) : IAuthService
+    public class AuthService(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository, IConfiguration configuration) : IAuthService
     {
         public async Task<bool> RegisterAsync(RegisterRequestDTO requestDTO)
         {
-            var existingUser = await context.Users.FirstOrDefaultAsync(x => x.Username == requestDTO.username || x.Email == requestDTO.email);
+            var user = await userRepository.GetByNameAsync(requestDTO.username);
+
+            await userRepository.Create(user);
+            await userRepository.Create(user);
+            await userRepository.Create(user);
+
+            await userRepository.CommitAsync();
+
+            IUserRepository userRepository = new UserRepository();
+
+
+            //var existingUser = await context.Users.FirstOrDefaultAsync(x => x.Username == requestDTO.username || x.Email == requestDTO.email);
             if (existingUser != null)
             {
                 return false;
