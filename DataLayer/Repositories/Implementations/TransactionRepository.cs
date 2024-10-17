@@ -28,12 +28,66 @@ public class TransactionRepository(FinanceContext financeContext): ITransactionR
     {
         await financeContext.Expenses.AddAsync(expense);
     }
-    public async Task GetByIdExpensesAsync(Guid id)
+    public async Task<Expense?> GetByIdExpensesAsync(Guid id)
     {
-        await financeContext.Expenses.FirstOrDefaultAsync(x =>x.Id == id);
+        return await financeContext.Expenses.FirstOrDefaultAsync(x =>x.Id == id);
     }
-    public async Task GetByIdIncomesAsync(Guid id)
+    public async Task<Income?> GetByIdIncomesAsync(Guid id)
     {
-        await financeContext.Incomes.FirstOrDefaultAsync(x => x.Id == id);
+        return await financeContext.Incomes.FirstOrDefaultAsync(x => x.Id == id);
+    }
+    public async Task RemoveIncomeAsync(Guid id)
+    {
+        Income? income = await GetByIdIncomesAsync(id);
+        if (income != null)
+        {
+            financeContext.Incomes.Remove(income);
+            await financeContext.SaveChangesAsync();
+        }
+    }
+    public async Task RemoveExpenseAsync(Guid id)
+    {
+        Expense? expense = await GetByIdExpensesAsync(id);
+        if (expense != null)
+        {
+            financeContext.Expenses.Remove(expense);
+            await financeContext.SaveChangesAsync();
+        }
+    }
+    public async Task<List<Category>> GetIncomeCategoriesAsync()
+    {
+       return await financeContext.Categories
+            .Where(c => c.Type == "Income")
+            .ToListAsync();
+    }
+    public async Task<List<Category>> GetExpenseCategoriesAsync()
+    {
+        return await financeContext.Categories
+             .Where(c => c.Type == "Expense")
+             .ToListAsync();
+    }
+    public async Task<decimal> GetTotalIncomeAsync(string username)
+    {
+       return await financeContext.Incomes
+            .Where(i => i.User.Username == username)
+            .SumAsync(i => i.Amount);
+    }
+    public async Task<decimal> GetTotalExpenseAsync(string username)
+    {
+        return await financeContext.Expenses
+             .Where(i => i.User.Username == username)
+             .SumAsync(i => i.Amount);
+    }
+    public async Task<List<Income>> GetIncomeCategoryListAsync()
+    {
+        return await financeContext.Incomes
+            .Include(i => i.Category)
+            .ToListAsync();
+    }
+    public async Task<List<Expense>> GetExpenseCategoryListAsync()
+    {
+        return await financeContext.Expenses
+            .Include(i => i.Category)
+            .ToListAsync();
     }
 }

@@ -61,47 +61,37 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
 
         if (deletedExpense != null)
         {
-            context.Expenses.Remove(deletedExpense);
-            await context.SaveChangesAsync();
+            await transactionRepository.RemoveExpenseAsync(id);
+            await transactionRepository.CommitAsync();
         }
         if (deletedIncome != null)
         {
-            context.Incomes.Remove(deletedIncome);
-            await context.SaveChangesAsync();
+            await transactionRepository.RemoveIncomeAsync(id);
+            await transactionRepository.CommitAsync();
         }
     }
-    public async Task<List<Category>> GetIncomeCategoriesAsync()
+    public async Task GetIncomeCategoriesAsync()
     {
-        return await context.Categories
-            .Where(c => c.Type == "Income")
-            .ToListAsync();
+         await transactionRepository.GetIncomeCategoriesAsync();
     }
 
-    public async Task<List<Category>> GetExpenseCategoriesAsync()
+    public async Task GetExpenseCategoriesAsync()
     {
-        return await context.Categories
-            .Where(c => c.Type == "Expense")
-            .ToListAsync();
+        await transactionRepository.GetExpenseCategoriesAsync();
     }
-    public async Task<decimal> GetTotalIncomeAsync(string username)
+    public async Task GetTotalIncomeAsync(string username)
     {
-        return await context.Incomes
-            .Where(i => i.User.Username == username)
-            .SumAsync(i => i.Amount);
+        await transactionRepository.GetTotalIncomeAsync(username);
     }
-    public async Task<decimal> GetTotalExpenseAsync(string username)
+    public async Task GetTotalExpenseAsync(string username)
     {
-        return await context.Expenses
-            .Where(e => e.User.Username == username)
-            .SumAsync(e => e.Amount);
+        await transactionRepository.GetTotalExpenseAsync(username);
     }
     public async Task<List<IncomeExpenseListViewModel>> GetIncomeExpenseListAsync()
     {
         var incomeExpenseList = new List<IncomeExpenseListViewModel>();
 
-        var incomes = await context.Incomes
-            .Include(i => i.Category)
-            .ToListAsync();
+        var incomes = await transactionRepository.GetIncomeCategoryListAsync();
 
         incomeExpenseList.AddRange(incomes.Select(i => new IncomeExpenseListViewModel
         {
@@ -112,9 +102,8 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
             Type = "Income"
         }));
 
-        var expenses = await context.Expenses
-            .Include(e => e.Category)
-            .ToListAsync();
+
+        var expenses = await transactionRepository.GetExpenseCategoryListAsync();
 
         incomeExpenseList.AddRange(expenses.Select(e => new IncomeExpenseListViewModel
         {

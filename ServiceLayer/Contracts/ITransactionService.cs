@@ -11,11 +11,11 @@ namespace ServiceLayer.Contracts
     public interface ITransactionService
     {
         Task<bool> AddIncomeAsync(AddIncomeRequestDTO model);
-        Task<List<Category>> GetIncomeCategoriesAsync();
-        Task<List<Category>> GetExpenseCategoriesAsync();
+        Task GetIncomeCategoriesAsync();
+        Task GetExpenseCategoriesAsync();
         Task<bool> AddExpenseAsync(AddExpenseRequestDTO model);
-        Task<decimal> GetTotalIncomeAsync(string username);
-        Task<decimal> GetTotalExpenseAsync(string username);
+        Task GetTotalIncomeAsync(string username);
+        Task GetTotalExpenseAsync(string username);
         Task<List<IncomeExpenseListViewModel>> GetIncomeExpenseListAsync();
         Task DeleteInListAsync(Guid id);
     }

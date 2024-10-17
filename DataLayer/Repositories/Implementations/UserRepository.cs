@@ -11,7 +11,7 @@ namespace DataLayer.Repositories.Implementations;
 
 public class UserRepository(FinanceContext financeContext) : IUserRepository
 {
-    public async Task Create(User user)
+    public async Task Create(User? user)
     {
         financeContext.Users.AddAsync(user);
     }
