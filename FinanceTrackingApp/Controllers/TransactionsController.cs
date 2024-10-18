@@ -18,7 +18,11 @@ public class TransactionsController(ITransactionService transactionService) : Co
     {
         ViewData["Title"] = "Income-Expense Dashboard";
 
-        var username = User.Identity.Name;
+        var username = User.Identity?.Name;
+        if (string.IsNullOrEmpty(username))
+        {
+            return RedirectToAction("Login", "Auth");
+        }
 
         var totalIncome = await transactionService.GetTotalIncomeAsync(username);
         var totalExpense = await transactionService.GetTotalExpenseAsync(username);

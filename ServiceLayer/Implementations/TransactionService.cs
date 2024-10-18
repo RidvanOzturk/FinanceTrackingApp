@@ -1,6 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Entities;
 using DataLayer.Repositories.Contracts;
+using DataLayer.Repositories.Implementations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Contracts;
@@ -18,30 +19,26 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
     public async Task<bool> AddIncomeAsync(AddIncomeRequestDTO model)
     {
         var user = await transactionRepository.GetByName(model.username);
-        if (user == null)
-        {
-            return false; 
-        }
+        if (user == null) return false;
+
         var income = new Income
         {
-            Id = Guid.NewGuid(), 
-            Amount = model.amount,     
+            Id = Guid.NewGuid(),
+            Amount = model.amount,
             Date = model.date,
             CategoryId = model.CategoryId,
-            UserId = user.Id     
+            UserId = user.Id
         };
-        await transactionRepository.AddIncomeAsync(income);
-        var result =  transactionRepository.CommitAsync();
-        return result != null;
-    }
 
+        await transactionRepository.AddIncomeAsync(income);
+        await transactionRepository.CommitAsync();  
+        return true;
+    }
     public async Task<bool> AddExpenseAsync(AddExpenseRequestDTO model)
     {
-        var user = transactionRepository.GetByName(model.username);
-        if (user == null)
-        {
-            return false;
-        }
+        var user = await transactionRepository.GetByName(model.username);
+        if (user == null) return false;
+
         var expense = new Expense
         {
             Id = Guid.NewGuid(),
@@ -50,34 +47,45 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
             CategoryId = model.CategoryId,
             UserId = user.Id
         };
+
         await transactionRepository.AddExpenseAsync(expense);
-        var result = transactionRepository.CommitAsync();
-        return result != null;
+        await transactionRepository.CommitAsync();
+        return true;
     }
     public async Task DeleteInListAsync(Guid id)
     {
-        var deletedExpense = transactionRepository.GetByIdExpensesAsync(id);
-        var deletedIncome = transactionRepository.GetByIdIncomesAsync(id);
+        var deletedExpense = await transactionRepository.GetByIdExpensesAsync(id);
+        var deletedIncome = await transactionRepository.GetByIdIncomesAsync(id);
 
         if (deletedExpense != null)
         {
             await transactionRepository.RemoveExpenseAsync(id);
-            await transactionRepository.CommitAsync();
+            await transactionRepository.CommitAsync();  
         }
         if (deletedIncome != null)
         {
             await transactionRepository.RemoveIncomeAsync(id);
-            await transactionRepository.CommitAsync();
+            await transactionRepository.CommitAsync(); 
         }
     }
-    public async Task GetIncomeCategoriesAsync()
+    public async Task<List<SelectListItem>> GetIncomeCategoriesAsync()
     {
-         await transactionRepository.GetIncomeCategoriesAsync();
+        var categories = await transactionRepository.GetIncomeCategoriesAsync();
+        return categories.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.Name
+        }).ToList();
     }
 
-    public async Task GetExpenseCategoriesAsync()
+    public async Task<List<SelectListItem>> GetExpenseCategoriesAsync()
     {
-        await transactionRepository.GetExpenseCategoriesAsync();
+        var categories = await transactionRepository.GetExpenseCategoriesAsync();
+        return categories.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = c.Name
+        }).ToList();
     }
     public async Task GetTotalIncomeAsync(string username)
     {
