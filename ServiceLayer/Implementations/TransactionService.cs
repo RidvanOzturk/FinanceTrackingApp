@@ -57,43 +57,26 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
         var deletedExpense = await transactionRepository.GetByIdExpensesAsync(id);
         var deletedIncome = await transactionRepository.GetByIdIncomesAsync(id);
 
-        if (deletedExpense != null)
-        {
-            await transactionRepository.RemoveExpenseAsync(id);
-            await transactionRepository.CommitAsync();  
-        }
-        if (deletedIncome != null)
-        {
-            await transactionRepository.RemoveIncomeAsync(id);
-            await transactionRepository.CommitAsync(); 
-        }
+        if (deletedExpense != null) await transactionRepository.RemoveExpenseAsync(id);
+        if (deletedIncome != null) await transactionRepository.RemoveIncomeAsync(id);
+        await transactionRepository.CommitAsync();
     }
-    public async Task<List<SelectListItem>> GetIncomeCategoriesAsync()
+    public async Task<List<Category>> GetIncomeCategoriesAsync()
     {
-        var categories = await transactionRepository.GetIncomeCategoriesAsync();
-        return categories.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Name
-        }).ToList();
+        return await transactionRepository.GetIncomeCategoriesAsync();
     }
 
-    public async Task<List<SelectListItem>> GetExpenseCategoriesAsync()
+    public async Task<List<Category>> GetExpenseCategoriesAsync()
     {
-        var categories = await transactionRepository.GetExpenseCategoriesAsync();
-        return categories.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = c.Name
-        }).ToList();
+        return await transactionRepository.GetExpenseCategoriesAsync();
     }
-    public async Task GetTotalIncomeAsync(string username)
+    public async Task<decimal> GetTotalIncomeAsync(string username)
     {
-        await transactionRepository.GetTotalIncomeAsync(username);
+        return await transactionRepository.GetTotalIncomeAsync(username);
     }
-    public async Task GetTotalExpenseAsync(string username)
+    public async Task<decimal> GetTotalExpenseAsync(string username)
     {
-        await transactionRepository.GetTotalExpenseAsync(username);
+        return await transactionRepository.GetTotalExpenseAsync(username);
     }
     public async Task<List<IncomeExpenseListViewModel>> GetIncomeExpenseListAsync()
     {

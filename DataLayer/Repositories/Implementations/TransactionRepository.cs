@@ -42,7 +42,6 @@ public class TransactionRepository(FinanceContext financeContext): ITransactionR
         if (income != null)
         {
             financeContext.Incomes.Remove(income);
-            await financeContext.SaveChangesAsync();
         }
     }
     public async Task RemoveExpenseAsync(Guid id)
@@ -51,7 +50,6 @@ public class TransactionRepository(FinanceContext financeContext): ITransactionR
         if (expense != null)
         {
             financeContext.Expenses.Remove(expense);
-            await financeContext.SaveChangesAsync();
         }
     }
     public async Task<List<Category>> GetIncomeCategoriesAsync()
