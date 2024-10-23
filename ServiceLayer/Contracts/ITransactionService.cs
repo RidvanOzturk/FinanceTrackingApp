@@ -11,8 +11,8 @@ namespace ServiceLayer.Contracts
     public interface ITransactionService
     {
         Task<bool> AddIncomeAsync(AddIncomeRequestDTO model);
-        Task GetIncomeCategoriesAsync();
-        Task GetExpenseCategoriesAsync();
+        Task<List<Category>> GetIncomeCategoriesAsync();
+        Task<List<Category>> GetExpenseCategoriesAsync();
         Task<bool> AddExpenseAsync(AddExpenseRequestDTO model);
         Task<decimal> GetTotalIncomeAsync(string username);
         Task<decimal> GetTotalExpenseAsync(string username);

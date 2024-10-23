@@ -1,41 +1,37 @@
-﻿using DataLayer;
+﻿using DataLayer.DTOs;
 using DataLayer.Entities;
+using DataLayer.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Implementations
 {
-    public class ReportService(FinanceContext context) : IReportService
+    public class ReportService(IReportRepository reportRepository) : IReportService
     {
-        public async Task<ReportingViewModel> GetReportAsync(ReportAsyncViewModel model)
+        public async Task<ReportingViewModel> GetReportAsync(ReportFilterDTO model)
         {
-            var incomeQuery = context.Incomes
-                .Where(i => i.Date >= model.startDate && i.Date <= model.endDate);
 
-            if (model.categoryId.HasValue)
+            var query = new ReportFilterRepDTO
             {
-                incomeQuery = incomeQuery.Where(i => i.CategoryId == model.categoryId.Value);
-            }
+                StartDate = model.startDate,
+                EndDate = model.endDate,
+                CategoryId = model.categoryId,
+            };
+
+            var incomeQuery = reportRepository.GetIncomeQuery(query);
+
+
 
             var totalIncome = await incomeQuery.SumAsync(i => i.Amount);
 
-            var expenseQuery = context.Expenses
-                .Where(e => e.Date >= model.startDate && e.Date <= model.endDate);
 
-            if (model.categoryId.HasValue)
-            {
-                expenseQuery = expenseQuery.Where(e => e.CategoryId == model.categoryId.Value);
-            }
+
+            var expenseQuery = reportRepository.GetExpenseQuery(query);
 
             var totalExpense = await expenseQuery.SumAsync(e => e.Amount);
-
+            var categories = await reportRepository.GetCategories();
             return new ReportingViewModel
             {
                 StartDate = model.startDate,
@@ -44,30 +40,28 @@ namespace ServiceLayer.Implementations
                 TotalIncome = totalIncome,
                 TotalExpense = totalExpense,
                 Balance = totalIncome - totalExpense,
-                Categories = await context.Categories
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.Id.ToString(),
-                        Text = c.Name
-                    }).ToListAsync()
+                Categories = categories
+    .Select(c => new SelectListItem
+    {
+        Value = c.Id.ToString(),
+        Text = c.Name
+    }).ToList()
             };
         }
 
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            return await context.Categories
-                .ToListAsync();
+           return await reportRepository.GetCategories();
         }
-        public async Task<List<IncomeExpenseListViewModel>> GetReportDataAsync(ReportAsyncViewModel model)
+        public async Task<List<IncomeExpenseListViewModel>> GetReportDataAsync(ReportFilterDTO model)
         {
-            var incomesQuery = context.Incomes
-                .Where(i => i.Date >= model.startDate && i.Date <= model.endDate);
-
-            if (model.categoryId.HasValue)
+            var query = new ReportFilterRepDTO
             {
-                incomesQuery = incomesQuery.Where(i => i.CategoryId == model.categoryId.Value);
-            }
-
+                StartDate = model.startDate,
+                EndDate = model.endDate,
+                CategoryId = model.categoryId,
+            };
+            var incomesQuery = reportRepository.GetIncomeQuery(query);
             var incomes = await incomesQuery
                 .Select(i => new IncomeExpenseListViewModel
                 {
@@ -75,17 +69,11 @@ namespace ServiceLayer.Implementations
                     CategoryName = i.Category.Name,
                     Amount = i.Amount,
                     Date = i.Date,
-                    Type = "Income" 
+                    Type = "Income"
                 })
                 .ToListAsync();
 
-            var expensesQuery = context.Expenses
-                .Where(e => e.Date >= model.startDate && e.Date <= model.endDate);
-
-            if (model.categoryId.HasValue)
-            {
-                expensesQuery = expensesQuery.Where(e => e.CategoryId == model.categoryId.Value);
-            }
+            var expensesQuery = reportRepository.GetExpenseQuery(query);
 
             var expenses = await expensesQuery
                 .Select(e => new IncomeExpenseListViewModel
@@ -103,15 +91,11 @@ namespace ServiceLayer.Implementations
         }
         public async Task<decimal> GetTotalIncomeAsync(string username)
         {
-            return await context.Incomes
-                .Where(i => i.User.Username == username)
-                .SumAsync(i => i.Amount);
+            return await reportRepository.GetTotalIncome(username);
         }
         public async Task<decimal> GetTotalExpenseAsync(string username)
         {
-            return await context.Expenses
-                .Where(e => e.User.Username == username)
-                .SumAsync(e => e.Amount);
+            return await reportRepository.GetTotalExpense(username);
         }
     }
 }

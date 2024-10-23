@@ -5,9 +5,9 @@ namespace FinanceTrackingApp.Extensions;
 
 public static class MapperExtensions
 {
-    public static ReportAsyncViewModel Map(this GenerateReportRequestModel model)
+    public static ReportFilterDTO Map(this GenerateReportRequestModel model)
     {
-        return new ReportAsyncViewModel
+        return new ReportFilterDTO
         {
             startDate = model.startDate,
             endDate = model.endDate,
@@ -18,9 +18,9 @@ public static class MapperExtensions
 
 //public static class MapperExtensions
 //{
-//    public static ReportAsyncViewModel Map(GenerateReportRequestModel model)
+//    public static ReportFilterDTO Map(GenerateReportRequestModel model)
 //    {
-//        return new ReportAsyncViewModel
+//        return new ReportFilterDTO
 //        {
 //            startDate = model.startDate,
 //            endDate = model.endDate,
