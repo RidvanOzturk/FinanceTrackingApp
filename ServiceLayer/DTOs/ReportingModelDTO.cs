@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.DTOs;
 
-    public class ReportingViewModel
+    public class ReportingModelDTO
     {
 
     public DateTime StartDate { get; set; }

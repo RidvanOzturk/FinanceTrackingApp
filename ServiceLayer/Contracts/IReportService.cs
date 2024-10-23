@@ -10,9 +10,9 @@ namespace ServiceLayer.Contracts
 {
     public interface IReportService
     {
-        Task<ReportingViewModel> GetReportAsync(ReportFilterDTO model);
+        Task<ReportingModelDTO> GetReportAsync(ReportFilterDTO model);
         Task<List<Category>> GetAllCategoriesAsync();
-        Task<List<IncomeExpenseListViewModel>> GetReportDataAsync(ReportFilterDTO model);
+        Task<List<IncomeExpenseListModelDTO>> GetReportDataAsync(ReportFilterDTO model);
         Task<decimal> GetTotalIncomeAsync(string username);
         Task<decimal> GetTotalExpenseAsync(string username);
 

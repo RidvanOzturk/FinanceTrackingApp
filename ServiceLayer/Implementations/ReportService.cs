@@ -10,7 +10,7 @@ namespace ServiceLayer.Implementations
 {
     public class ReportService(IReportRepository reportRepository) : IReportService
     {
-        public async Task<ReportingViewModel> GetReportAsync(ReportFilterDTO model)
+        public async Task<ReportingModelDTO> GetReportAsync(ReportFilterDTO model)
         {
 
             var query = new ReportFilterRepDTO
@@ -32,7 +32,7 @@ namespace ServiceLayer.Implementations
 
             var totalExpense = await expenseQuery.SumAsync(e => e.Amount);
             var categories = await reportRepository.GetCategories();
-            return new ReportingViewModel
+            return new ReportingModelDTO
             {
                 StartDate = model.startDate,
                 EndDate = model.endDate,
@@ -53,7 +53,7 @@ namespace ServiceLayer.Implementations
         {
            return await reportRepository.GetCategories();
         }
-        public async Task<List<IncomeExpenseListViewModel>> GetReportDataAsync(ReportFilterDTO model)
+        public async Task<List<IncomeExpenseListModelDTO>> GetReportDataAsync(ReportFilterDTO model)
         {
             var query = new ReportFilterRepDTO
             {
@@ -63,7 +63,7 @@ namespace ServiceLayer.Implementations
             };
             var incomesQuery = reportRepository.GetIncomeQuery(query);
             var incomes = await incomesQuery
-                .Select(i => new IncomeExpenseListViewModel
+                .Select(i => new IncomeExpenseListModelDTO
                 {
                     Id = i.Id,
                     CategoryName = i.Category.Name,
@@ -76,7 +76,7 @@ namespace ServiceLayer.Implementations
             var expensesQuery = reportRepository.GetExpenseQuery(query);
 
             var expenses = await expensesQuery
-                .Select(e => new IncomeExpenseListViewModel
+                .Select(e => new IncomeExpenseListModelDTO
                 {
                     Id = e.Id,
                     CategoryName = e.Category.Name,

@@ -78,13 +78,13 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
     {
         return await transactionRepository.GetTotalExpenseAsync(username);
     }
-    public async Task<List<IncomeExpenseListViewModel>> GetIncomeExpenseListAsync()
+    public async Task<List<IncomeExpenseListModelDTO>> GetIncomeExpenseListAsync()
     {
-        var incomeExpenseList = new List<IncomeExpenseListViewModel>();
+        var incomeExpenseList = new List<IncomeExpenseListModelDTO>();
 
         var incomes = await transactionRepository.GetIncomeCategoryListAsync();
 
-        incomeExpenseList.AddRange(incomes.Select(i => new IncomeExpenseListViewModel
+        incomeExpenseList.AddRange(incomes.Select(i => new IncomeExpenseListModelDTO
         {
             Id = i.Id,
             CategoryName = i.Category.Name,
@@ -96,7 +96,7 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
 
         var expenses = await transactionRepository.GetExpenseCategoryListAsync();
 
-        incomeExpenseList.AddRange(expenses.Select(e => new IncomeExpenseListViewModel
+        incomeExpenseList.AddRange(expenses.Select(e => new IncomeExpenseListModelDTO
         {
             Id = e.Id,
             CategoryName = e.Category.Name,

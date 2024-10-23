@@ -16,7 +16,7 @@ namespace ServiceLayer.Contracts
         Task<bool> AddExpenseAsync(AddExpenseRequestDTO model);
         Task<decimal> GetTotalIncomeAsync(string username);
         Task<decimal> GetTotalExpenseAsync(string username);
-        Task<List<IncomeExpenseListViewModel>> GetIncomeExpenseListAsync();
+        Task<List<IncomeExpenseListModelDTO>> GetIncomeExpenseListAsync();
         Task DeleteInListAsync(Guid id);
     }
 }

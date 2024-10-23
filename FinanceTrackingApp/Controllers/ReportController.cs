@@ -27,7 +27,7 @@ public class ReportController(IReportService reportService) : Controller
 
         var balance = totalIncome - totalExpense;
 
-        var reportingViewModel = new ReportingViewModel
+        var reportingViewModel = new ReportingModelDTO
         {
             Categories = categories.Select(c => new SelectListItem
             {
@@ -63,7 +63,7 @@ public class ReportController(IReportService reportService) : Controller
 
         return BadRequest("Invalid report type.");
     }
-    private byte[] GenerateExcel(List<IncomeExpenseListViewModel> reportData)
+    private byte[] GenerateExcel(List<IncomeExpenseListModelDTO> reportData)
     {
         ExcelPackage.LicenseContext = LicenseContext.Commercial;
         using (var package = new ExcelPackage(new FileInfo("MyWorkbook.xlsx")))
@@ -85,7 +85,7 @@ public class ReportController(IReportService reportService) : Controller
             return package.GetAsByteArray();
         }
     }
-    private byte[] GeneratePdf(List<IncomeExpenseListViewModel> reportData)
+    private byte[] GeneratePdf(List<IncomeExpenseListModelDTO> reportData)
     {
         using (var memoryStream = new MemoryStream())
         {
