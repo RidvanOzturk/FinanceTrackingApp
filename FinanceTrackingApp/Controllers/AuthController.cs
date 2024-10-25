@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using ServiceLayer.Implementations;
 using ServiceLayer.DTOs;
 using FinanceTrackingApp.Models.Requests;
+using FinanceTrackingApp.Extensions;
 
 namespace FinanceTrackingApp.Controllers;
 
@@ -57,7 +58,7 @@ public class AuthController(IAuthService authService) : Controller
         {
             return View(requestModel);
         }
-        var requestDTO = ConstructRegisterDTO(requestModel);
+        var requestDTO = requestModel.RegisterMap();
         var result = await authService.RegisterAsync(requestDTO);
         if (result)
         {
@@ -76,15 +77,6 @@ public class AuthController(IAuthService authService) : Controller
         await authService.LogoutAsync();
         return RedirectToAction("Login", "Auth");
     }
-
-    private RegisterRequestDTO ConstructRegisterDTO(RegisterRequestModel requestModel)
-    {
-        return new RegisterRequestDTO
-        {
-            username = requestModel.username,
-            email = requestModel.mail,
-            password = requestModel.password
-        };
-    }
+    
 
 }

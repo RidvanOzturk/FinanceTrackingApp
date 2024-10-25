@@ -1,12 +1,10 @@
-﻿using DataLayer.Entities;
-using FinanceTrackingApp.Models.Requests;
+﻿using FinanceTrackingApp.Models.Requests;
 using FinanceTrackingApp.Models.Responses;
+using FinanceTrackingApp.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
-using ServiceLayer.Implementations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace FinanceTrackingApp.Controllers;
 
 [Route("transactions")]
@@ -55,7 +53,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     {
         if (ModelState.IsValid)
         {
-            var requestDTO = ConstructAddIncomeDTO(requestModel);
+            var requestDTO = requestModel.IncomeMap(User.Identity.Name);
 
             var result = await transactionService.AddIncomeAsync(requestDTO);
             if (result)
@@ -91,7 +89,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
     {
         if (ModelState.IsValid)
         {
-            var requestDTO = ConstructAddExpenseDTO(requestModel);
+            var requestDTO = requestModel.ExpenseMap(User.Identity.Name);
             var result = await transactionService.AddExpenseAsync(requestDTO);
             if (result)
             {
@@ -122,25 +120,5 @@ public class TransactionsController(ITransactionService transactionService) : Co
         return RedirectToAction("IncomeExpenseList");
     }
 
-    private AddIncomeRequestDTO ConstructAddIncomeDTO(AddIncomeRequestModel value)
-    {
-        //Mapping
-        return new AddIncomeRequestDTO
-        {
-            username = User.Identity.Name,
-            amount = value.amount,
-            CategoryId = value.CategoryId,
-            date = value.date
-        };
-    }
-    private AddExpenseRequestDTO ConstructAddExpenseDTO(AddExpenseRequestModel value) 
-    {
-        return new AddExpenseRequestDTO
-        {
-            username = User.Identity.Name,
-            amount = value.amount,
-            CategoryId = value.CategoryId,
-            date = value.date
-        };
-    }
+   
 }

@@ -45,7 +45,7 @@ public class ReportController(IReportService reportService) : Controller
     [HttpGet("generate-report")]
     public async Task<IActionResult> GenerateReport(GenerateReportRequestModel requestModel)
     {
-        var generateReportModel = requestModel.Map();
+        var generateReportModel = requestModel.ReportMap();
 
         var reportData = await reportService.GetReportDataAsync(generateReportModel);
 
