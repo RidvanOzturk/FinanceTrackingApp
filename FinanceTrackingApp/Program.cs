@@ -21,8 +21,6 @@ builder.Services.AddAuthentication("Cookies").AddCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
 });
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ICategoriesService, CategoriesService>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
