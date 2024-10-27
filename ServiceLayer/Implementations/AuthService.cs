@@ -33,7 +33,7 @@ namespace ServiceLayer.Implementations
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.password);
             var newUser = requestDTO.UserMap();
             await userRepository.Create(newUser);
-            var result = userRepository.CommitAsync();
+            var result = await userRepository.CommitAsync();
 
             return result != null;
         }

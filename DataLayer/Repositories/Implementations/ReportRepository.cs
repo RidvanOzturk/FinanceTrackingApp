@@ -2,12 +2,6 @@
 using DataLayer.Entities;
 using DataLayer.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace DataLayer.Repositories.Implementations;
 
@@ -52,4 +46,3 @@ public class ReportRepository(FinanceContext financeContext) : IReportRepository
             .SumAsync(e => e.Amount);
     }
 }
-//birden fazla işlem uygunsa tek bir metotta olacak. 

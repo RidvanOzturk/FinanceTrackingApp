@@ -1,11 +1,6 @@
 ﻿using DataLayer.Entities;
 using DataLayer.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.Repositories.Implementations;
 
@@ -16,9 +11,10 @@ public class TransactionRepository(FinanceContext financeContext): ITransactionR
         return await financeContext.Users
             .FirstOrDefaultAsync(x => x.Username == name);
     }
-    public async Task CommitAsync()
+    public async Task<bool> CommitAsync()
     {
-        await financeContext.SaveChangesAsync();
+        var changes = await financeContext.SaveChangesAsync();
+        return changes > 0;
     }
     public async Task AddIncomeAsync(Income income)
     {
