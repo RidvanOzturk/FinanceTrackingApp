@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using DataLayer.Repositories.Contracts;
 using DataLayer.Repositories.Implementations;
+using ServiceLayer.Extensions;
 
 
 namespace ServiceLayer.Implementations
@@ -30,15 +31,7 @@ namespace ServiceLayer.Implementations
             }
 
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.password);
-
-            var newUser = new User
-            {
-                Id = Guid.NewGuid(),
-                Username = requestDTO.username,
-                Email = requestDTO.email,
-                PasswordHash = hashedPassword 
-            };
-
+            var newUser = requestDTO.UserMap();
             await userRepository.Create(newUser);
             var result = userRepository.CommitAsync();
 

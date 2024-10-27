@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Contracts;
 using ServiceLayer.DTOs;
+using ServiceLayer.Extensions;
 
 namespace ServiceLayer.Implementations
 {
@@ -13,12 +14,7 @@ namespace ServiceLayer.Implementations
         public async Task<ReportingModelDTO> GetReportAsync(ReportFilterDTO model)
         {
 
-            var query = new ReportFilterRepDTO
-            {
-                StartDate = model.startDate,
-                EndDate = model.endDate,
-                CategoryId = model.categoryId,
-            };
+            var query = model.ReportMap();
 
             var incomeQuery = reportRepository.GetIncomeQuery(query);
 
@@ -55,12 +51,7 @@ namespace ServiceLayer.Implementations
         }
         public async Task<List<IncomeExpenseListModelDTO>> GetReportDataAsync(ReportFilterDTO model)
         {
-            var query = new ReportFilterRepDTO
-            {
-                StartDate = model.startDate,
-                EndDate = model.endDate,
-                CategoryId = model.categoryId,
-            };
+            var query = model.ReportQueryMap();
             var incomesQuery = reportRepository.GetIncomeQuery(query);
             var incomes = await incomesQuery
                 .Select(i => new IncomeExpenseListModelDTO

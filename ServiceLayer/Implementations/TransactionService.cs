@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceLayer.Extensions;
 
 namespace ServiceLayer.Implementations;
 
@@ -21,14 +22,7 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
         var user = await transactionRepository.GetByName(model.username);
         if (user == null) return false;
 
-        var income = new Income
-        {
-            Id = Guid.NewGuid(),
-            Amount = model.amount,
-            Date = model.date,
-            CategoryId = model.CategoryId,
-            UserId = user.Id
-        };
+        var income = model.IncomeMap(user);
 
         await transactionRepository.AddIncomeAsync(income);
         await transactionRepository.CommitAsync();  
@@ -39,14 +33,7 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
         var user = await transactionRepository.GetByName(model.username);
         if (user == null) return false;
 
-        var expense = new Expense
-        {
-            Id = Guid.NewGuid(),
-            Amount = model.amount,
-            Date = model.date,
-            CategoryId = model.CategoryId,
-            UserId = user.Id
-        };
+        var expense = model.ExpenseMap(user);
 
         await transactionRepository.AddExpenseAsync(expense);
         await transactionRepository.CommitAsync();
