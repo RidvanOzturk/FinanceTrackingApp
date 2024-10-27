@@ -20,7 +20,10 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
     public async Task<bool> AddIncomeAsync(AddIncomeRequestDTO model)
     {
         var user = await transactionRepository.GetByName(model.username);
-        if (user == null) return false;
+        if (user == null) 
+        {
+            return false; 
+        }
 
         var income = model.IncomeMap(user);
 
@@ -31,7 +34,10 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
     public async Task<bool> AddExpenseAsync(AddExpenseRequestDTO model)
     {
         var user = await transactionRepository.GetByName(model.username);
-        if (user == null) return false;
+        if (user == null)
+        {
+            return false;
+        }
 
         var expense = model.ExpenseMap(user);
 
@@ -44,8 +50,14 @@ public class TransactionService(ITransactionRepository transactionRepository) : 
         var deletedExpense = await transactionRepository.GetByIdExpensesAsync(id);
         var deletedIncome = await transactionRepository.GetByIdIncomesAsync(id);
 
-        if (deletedExpense != null) await transactionRepository.RemoveExpenseAsync(id);
-        if (deletedIncome != null) await transactionRepository.RemoveIncomeAsync(id);
+        if (deletedExpense != null) 
+        { 
+            await transactionRepository.RemoveExpenseAsync(id); 
+        }
+        if (deletedIncome != null)
+        {
+            await transactionRepository.RemoveIncomeAsync(id);
+        }
         await transactionRepository.CommitAsync();
     }
     public async Task<List<Category>> GetIncomeCategoriesAsync()
